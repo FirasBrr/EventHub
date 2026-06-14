@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using EventHub.Data;
+using EventHub.Models;
+using EventHub.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using EventHub.Data;
-using EventHub.ViewModels;
 
 namespace EventHub.Controllers
 {
@@ -10,10 +12,14 @@ namespace EventHub.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AdminController(ApplicationDbContext context)
+        public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // GET: Admin/Dashboard
@@ -173,18 +179,98 @@ namespace EventHub.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                users = users.Where(u => u.UserName?.Contains(search) == true ||
-                                         u.Email?.Contains(search) == true).ToList();
+                users = users.Where(u =>
+                    u.UserName?.Contains(search, StringComparison.OrdinalIgnoreCase) == true ||
+                    u.Email?.Contains(search, StringComparison.OrdinalIgnoreCase) == true ||
+                    (u.FirstName + " " + u.LastName).Contains(search, StringComparison.OrdinalIgnoreCase) == true
+                ).ToList();
             }
 
+            // Get user roles
+            var userRoles = new Dictionary<string, List<string>>();
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userRoles[user.Id] = roles.ToList();
+            }
+
+            ViewBag.UserRoles = userRoles;
             ViewBag.SearchTerm = search;
-            ViewBag.Role = role;
+            ViewBag.RoleFilter = role;
 
             return View(users);
         }
 
+        // GET: Admin/EditUser/{id}
+        public async Task<IActionResult> EditUser(string id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound();
+
+            var roles = await _roleManager.Roles.ToListAsync();
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            ViewBag.AllRoles = roles;
+            ViewBag.UserRoles = userRoles;
+
+            return View(user);
+        }
+
+        // POST: Admin/EditUser
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(string id, ApplicationUser updatedUser, List<string> selectedRoles)
+        {
+            if (id != updatedUser.Id)
+                return NotFound();
+
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound();
+
+            // Update user properties
+            user.FirstName = updatedUser.FirstName;
+            user.LastName = updatedUser.LastName;
+            user.UserName = updatedUser.UserName;
+            user.Email = updatedUser.Email;
+            user.IsActive = updatedUser.IsActive;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                // Update roles
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                if (selectedRoles != null && selectedRoles.Any())
+                {
+                    await _userManager.AddToRolesAsync(user, selectedRoles);
+                }
+
+                TempData["Success"] = "User updated successfully!";
+                return RedirectToAction(nameof(ManageUsers));
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+
+            var allRoles = await _roleManager.Roles.ToListAsync();
+            var userRoles = await _userManager.GetRolesAsync(user);
+            ViewBag.AllRoles = allRoles;
+            ViewBag.UserRoles = userRoles;
+
+            return View(user);
+        }
+
         // POST: Admin/ToggleUserStatus
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ToggleUserStatus(string id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -193,6 +279,29 @@ namespace EventHub.Controllers
                 user.IsActive = !user.IsActive;
                 await _context.SaveChangesAsync();
                 TempData["Success"] = $"User {(user.IsActive ? "activated" : "deactivated")} successfully!";
+            }
+            return RedirectToAction(nameof(ManageUsers));
+        }
+
+        // POST: Admin/DeleteUser
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user != null)
+            {
+                // Don't allow deleting yourself
+                var currentUser = await _userManager.GetUserAsync(User);
+                if (currentUser.Id == id)
+                {
+                    TempData["Error"] = "You cannot delete your own account!";
+                    return RedirectToAction(nameof(ManageUsers));
+                }
+
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "User deleted successfully!";
             }
             return RedirectToAction(nameof(ManageUsers));
         }

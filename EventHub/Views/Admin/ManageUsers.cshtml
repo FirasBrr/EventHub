@@ -1,0 +1,133 @@
+﻿@model IEnumerable<EventHub.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Manage Users - Admin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .page-header {
+        margin-bottom: 32px;
+    }
+
+        .page-header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+    .search-bar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 10px 16px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+    }
+
+    .btn-search {
+        background: var(--accent-blue);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .users-table {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow-x: auto;
+    }
+
+        .users-table table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .users-table th {
+            text-align: left;
+            padding: 14px 16px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .users-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+    .status-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+    }
+
+    .status-active {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    .status-inactive {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .btn-icon {
+        background: transparent;
+        border: 1px solid var(--border);
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container">
+    <div class="page-header"><h1><i class="bi bi-people"></i> Manage Users</h1></div>
+
+    <form method="get" class="search-bar">
+        <input type="text" name="search" class="search-input" placeholder="Search by name, email..." value="@ViewBag.SearchTerm" />
+        <button type="submit" class="btn-search"><i class="bi bi-search"></i> Search</button>
+        <a href="/Admin/ManageUsers" class="btn-search" style="background: #64748b;">Clear</a>
+    </form>
+
+    <div class="users-table">
+        <table>
+            <thead><tr><th>User</th><th>Email</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td><strong>@user.FirstName @user.LastName</strong><br /><small>@@@user.UserName</small></td>
+                        <td>@user.Email</td>
+                        <td><span class="status-badge @(user.IsActive ? "status-active" : "status-inactive")">@(user.IsActive ? "Active" : "Inactive")</span></td>
+                        <td>@user.CreatedAt.ToString("MMM dd, yyyy")</td>
+                        <td class="action-buttons">
+                            <a asp-action="EditUser" asp-route-id="@user.Id" class="btn-icon"><i class="bi bi-pencil"></i> Edit</a>
+                            <form asp-action="ToggleUserStatus" asp-route-id="@user.Id" method="post">@Html.AntiForgeryToken()<button type="submit" class="btn-icon">@(user.IsActive ? "Disable" : "Enable")</button></form>
+                            <form asp-action="DeleteUser" asp-route-id="@user.Id" method="post" onsubmit="return confirm('Delete this user?')">@Html.AntiForgeryToken()<button type="submit" class="btn-icon" style="color:#dc2626;"><i class="bi bi-trash"></i> Delete</button></form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -107,6 +107,44 @@
                 background: var(--accent-blue-dim);
             }
 
+        /* Admin Dropdown */
+        .dropdown-menu {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 8px;
+            min-width: 200px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            margin-top: 8px;
+        }
+
+        .dropdown-item {
+            color: var(--text-md);
+            border-radius: var(--radius-sm);
+            padding: 10px 16px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+            .dropdown-item:hover {
+                background: var(--accent-blue-dim);
+                color: var(--accent-blue);
+            }
+
+            .dropdown-item i {
+                width: 18px;
+                font-size: 0.9rem;
+            }
+
+        .dropdown-divider {
+            border-color: var(--border);
+            margin: 8px 0;
+        }
+
         /* ─── BUTTONS ────────────────────────────────────── */
         .btn-login {
             font-size: 0.875rem;
@@ -222,42 +260,6 @@
             color: white;
             flex-shrink: 0;
         }
-
-        .dropdown-menu {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 6px;
-            min-width: 200px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.08);
-            margin-top: 6px !important;
-        }
-
-        .dropdown-item {
-            color: var(--text-md);
-            border-radius: var(--radius-sm);
-            padding: 9px 14px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-            .dropdown-item:hover {
-                background: var(--accent-blue-dim);
-                color: var(--accent-blue);
-            }
-
-            .dropdown-item.danger {
-                color: var(--accent-red);
-            }
-
-                .dropdown-item.danger:hover {
-                    background: var(--accent-red-dim);
-                    color: var(--accent-red);
-                }
 
         /* ─── ALERTS ─────────────────────────────────────── */
         .alert {
@@ -555,17 +557,32 @@
                                 </a>
                             </li>
                         }
+
                         @if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Event" asp-action="Create">
-                                    <i class="bi bi-plus-circle"></i> Create Event
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-shield-lock"></i> Admin
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">
-                                    <i class="bi bi-grid-1x2"></i> Dashboard
-                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard">
+                                            <i class="bi bi-speedometer2"></i> Dashboard
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Event" asp-action="Create">
+                                            <i class="bi bi-plus-circle"></i> Create Event
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Admin" asp-action="ManageUsers">
+                                            <i class="bi bi-people"></i> Manage Users
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         }
                     }
