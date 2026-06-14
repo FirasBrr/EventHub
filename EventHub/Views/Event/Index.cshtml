@@ -1,95 +1,311 @@
 ﻿@model IEnumerable<EventHub.Models.Event>
 
 @{
-    ViewData["Title"] = "Events";
+    ViewData["Title"] = "Discover Events - EventHub";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1><i class="bi bi-calendar-event"></i> Upcoming Events</h1>
-        @if (User.IsInRole("Admin"))
-        {
-            <a asp-action="Create" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Create New Event
-            </a>
+<style>
+    .events-header {
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 30px 30px;
+    }
+
+    .filter-card {
+        background: rgba(26, 26, 46, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+    }
+
+    .event-card {
+        background: rgba(26, 26, 46, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(0, 210, 255, 0.1);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        height: 100%;
+    }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 210, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.2);
         }
+
+    .event-image {
+        height: 200px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .event-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        z-index: 1;
+    }
+
+    .event-category {
+        display: inline-block;
+        padding: 4px 12px;
+        background: rgba(0, 210, 255, 0.2);
+        border-radius: 20px;
+        font-size: 12px;
+        color: #00d2ff;
+    }
+
+    .event-meta {
+        display: flex;
+        gap: 15px;
+        font-size: 14px;
+        color: #a0a0b0;
+        margin: 10px 0;
+    }
+
+        .event-meta i {
+            color: #00d2ff;
+            margin-right: 5px;
+        }
+
+    .price-tag {
+        font-size: 1.3rem;
+        font-weight: bold;
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .btn-view {
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        border: none;
+        display: inline-block;
+        text-decoration: none;
+        font-size: 0.875rem;
+    }
+
+        .btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+            color: white;
+        }
+
+    .btn-register-event {
+        background: transparent;
+        border: 2px solid #00d2ff;
+        color: #00d2ff;
+        padding: 6px 18px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        display: inline-block;
+        text-decoration: none;
+        font-size: 0.875rem;
+    }
+
+        .btn-register-event:hover {
+            background: rgba(0, 210, 255, 0.1);
+            transform: translateY(-2px);
+            color: #00d2ff;
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem;
+        background: rgba(26, 26, 46, 0.95);
+        border-radius: 15px;
+        border: 1px solid rgba(0, 210, 255, 0.2);
+    }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #00d2ff;
+            margin-bottom: 1rem;
+        }
+
+    .search-input, .filter-select {
+        background: rgba(26, 26, 46, 0.9);
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        color: white;
+    }
+
+        .search-input:focus, .filter-select:focus {
+            background: rgba(26, 26, 46, 1);
+            border-color: #00d2ff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 210, 255, 0.25);
+            color: white;
+        }
+
+    .bg-gradient {
+        background: linear-gradient(135deg, rgba(0,210,255,0.2), rgba(58,123,213,0.2));
+    }
+
+    /* Mobile responsive */
+    @@media (max-width: 768px) {
+        .events-header {
+            padding: 2rem 0;
+        }
+
+        .filter-card {
+            padding: 1rem;
+        }
+
+        .event-meta {
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+    }
+</style>
+
+<div class="events-header">
+    <div class="container">
+        <h1 class="text-white text-center mb-3">
+            <i class="bi bi-calendar-event-fill"></i> Discover Events
+        </h1>
+        <p class="text-white text-center opacity-75">Find and join amazing events happening near you</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <!-- Filter Section -->
+    <div class="filter-card">
+        <form asp-action="Index" method="get" class="row g-3">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent" style="border-color: rgba(0,210,255,0.2); color: #00d2ff;">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" name="searchTerm" class="form-control search-input"
+                           placeholder="Search by name, location..." value="@ViewBag.CurrentSearchTerm">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="category" class="form-select filter-select">
+                    <option value="">All Categories</option>
+                    <option value="Conference">Conference</option>
+                    <option value="Workshop">Workshop</option>
+                    <option value="Music">Music</option>
+                    <option value="Networking">Networking</option>
+                    <option value="Sports">Sports</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="date" name="date" class="form-control search-input" placeholder="Date">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn-view w-100" style="border: none; cursor: pointer;">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </div>
+        </form>
     </div>
 
-    @if (TempData["Success"] != null)
+    <!-- Create Event Button for Admin -->
+    @if (User.IsInRole("Admin"))
     {
-        <div class="alert alert-success alert-dismissible fade show">
-            @TempData["Success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="text-end mb-3">
+            <a asp-action="Create" class="btn-view">
+                <i class="bi bi-plus-circle"></i> Create New Event
+            </a>
         </div>
     }
 
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show">
-            @TempData["Error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
-
+    <!-- Events Grid -->
     @if (!Model.Any())
     {
-        <div class="alert alert-info">
-            No upcoming events found.
+        <div class="empty-state">
+            <i class="bi bi-calendar-x"></i>
+            <h3 class="text-white">No events found</h3>
+            <p class="text-muted">Try adjusting your search or check back later for new events.</p>
             @if (User.IsInRole("Admin"))
             {
-                <a asp-action="Create">Create the first event!</a>
+                <a asp-action="Create" class="btn-view mt-3" style="display: inline-block;">Create First Event</a>
             }
         </div>
     }
     else
     {
-        <div class="row">
+        <div class="row g-4">
             @foreach (var item in Model)
             {
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card h-100 shadow-sm">
-                        @if (item.Latitude.HasValue && item.Longitude.HasValue)
-                        {
-                            <div id="miniMap-@item.Id" style="height: 200px;" class="card-img-top"></div>
-                        }
-                        else
-                        {
-                            <div class="bg-secondary text-white text-center py-5">
-                                <i class="bi bi-map" style="font-size: 3rem;"></i>
-                                <p>Location TBD</p>
-                            </div>
-                        }
-
-                        <div class="card-body">
-                            <h5 class="card-title">@item.Name</h5>
-                            <p class="card-text text-muted">
-                                <i class="bi bi-calendar"></i> @item.DateTime.ToString("MMM dd, yyyy - h:mm tt")<br />
-                                <i class="bi bi-geo-alt"></i> @item.Location<br />
-                                <i class="bi bi-tag"></i> @item.Category
-                            </p>
-                            <p class="card-text">@(item.Description.Length > 100 ? item.Description.Substring(0, 100) + "..." : item.Description)</p>
-                            <p>
-                                @if (item.IsFree)
-                                {
-                                    <span class="badge bg-success">FREE</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-primary">@item.Price.ToString("C")</span>
-                                }
-                                <span class="badge bg-info">@item.Capacity spots</span>
-                            </p>
-                        </div>
-                        <div class="card-footer bg-transparent">
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">View Details</a>
-                            @if (User.Identity.IsAuthenticated)
+                <div class="col-md-6 col-lg-4">
+                    <div class="event-card">
+                        <div class="position-relative">
+                            @if (item.Latitude.HasValue && item.Longitude.HasValue)
                             {
-                                <a asp-action="Register" asp-route-id="@item.Id" class="btn btn-success btn-sm">Register</a>
+                                <div id="miniMap-@item.Id" class="event-image" style="height: 200px;"></div>
                             }
+                            else
+                            {
+                                <div class="event-image bg-gradient d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, rgba(0,210,255,0.2), rgba(58,123,213,0.2));">
+                                    <i class="bi bi-map" style="font-size: 3rem; color: #00d2ff;"></i>
+                                </div>
+                            }
+                            <span class="event-badge" style="background: @(item.IsFree ? "#28a745" : "#00d2ff")">
+                                @(item.IsFree ? "FREE" : "PAID")
+                            </span>
+                        </div>
+
+                        <div class="p-3">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="event-category">
+                                    <i class="bi bi-tag"></i> @item.Category
+                                </span>
+                                <small class="text-muted">
+                                    <i class="bi bi-people"></i> @(item.Registrations?.Count ?? 0)/@item.Capacity
+                                </small>
+                            </div>
+
+                            <h5 class="text-white fw-bold mb-2">@item.Name</h5>
+
+                            <div class="event-meta">
+                                <span><i class="bi bi-calendar"></i> @item.DateTime.ToString("MMM dd, yyyy")</span>
+                                <span><i class="bi bi-clock"></i> @item.DateTime.ToString("h:mm tt")</span>
+                            </div>
+
+                            <div class="event-meta">
+                                <span><i class="bi bi-geo-alt"></i> @item.Location</span>
+                            </div>
+
+                            <p class="text-muted small mt-2">@(item.Description.Length > 100 ? item.Description.Substring(0, 100) + "..." : item.Description)</p>
+
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="price-tag">@(item.IsFree ? "FREE" : item.Price.ToString("C"))</span>
+                                <div>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn-view" style="padding: 6px 15px; font-size: 0.8rem; margin-right: 5px;">
+                                        <i class="bi bi-eye"></i> View
+                                    </a>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a asp-action="Register" asp-route-id="@item.Id" class="btn-register-event" style="padding: 6px 15px; font-size: 0.8rem;">
+                                            <i class="bi bi-ticket"></i> Register
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+
                             @if (User.IsInRole("Admin"))
                             {
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                                <div class="mt-3 pt-2 border-top" style="border-color: rgba(0,210,255,0.1);">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="text-warning me-3 text-decoration-none small">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger text-decoration-none small">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                </div>
                             }
                         </div>
                     </div>
@@ -107,11 +323,11 @@
         {
                 <text>
                 var map@(item.Id) = L.map('miniMap-@item.Id').setView([@item.Latitude, @item.Longitude], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; OpenStreetMap'
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
                 }).addTo(map@(item.Id));
                 L.marker([@item.Latitude, @item.Longitude]).addTo(map@(item.Id))
-                    .bindPopup('@item.Name');
+                    .bindPopup('<b>@item.Name</b><br/>@item.Location');
                 </text>
         }
     </script>
