@@ -16,13 +16,91 @@ namespace EventHub.Controllers
             _context = context;
         }
 
-        // GET: Event - Everyone can view events
-        public async Task<IActionResult> Index()
+        // GET: Event - Everyone can view events (with filters)
+        public async Task<IActionResult> Index(string searchTerm, string category, decimal? minPrice, decimal? maxPrice,
+                                                bool? showFree, string dateFrom, string dateTo, string sortBy)
         {
-            var events = await _context.Events
-                .Where(e => e.IsActive && e.DateTime >= DateTime.Now)
-                .OrderBy(e => e.DateTime)
-                .ToListAsync();
+            var query = _context.Events
+                .Include(e => e.Registrations)
+                .Where(e => e.IsActive && e.DateTime >= DateTime.Now);
+
+            // Store filter values in ViewBag for the view
+            ViewBag.CurrentSearchTerm = searchTerm;
+            ViewBag.CurrentCategory = category;
+            ViewBag.MinPrice = minPrice;
+            ViewBag.MaxPrice = maxPrice;
+            ViewBag.ShowFree = showFree ?? false;
+            ViewBag.DateFrom = dateFrom;
+            ViewBag.DateTo = dateTo;
+            ViewBag.SortBy = sortBy ?? "date_asc";
+
+            // Apply search filter
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(e => e.Name.Contains(searchTerm) ||
+                                         e.Description.Contains(searchTerm) ||
+                                         e.Location.Contains(searchTerm));
+            }
+
+            // Apply category filter
+            if (!string.IsNullOrEmpty(category) && category != "All")
+            {
+                query = query.Where(e => e.Category == category);
+            }
+
+            // Apply price filters
+            if (showFree == true)
+            {
+                query = query.Where(e => e.IsFree == true);
+            }
+            else
+            {
+                if (minPrice.HasValue)
+                {
+                    query = query.Where(e => e.Price >= minPrice.Value);
+                }
+                if (maxPrice.HasValue)
+                {
+                    query = query.Where(e => e.Price <= maxPrice.Value);
+                }
+            }
+
+            // Apply date filters
+            if (!string.IsNullOrEmpty(dateFrom))
+            {
+                var fromDate = DateTime.Parse(dateFrom);
+                query = query.Where(e => e.DateTime.Date >= fromDate.Date);
+            }
+            if (!string.IsNullOrEmpty(dateTo))
+            {
+                var toDate = DateTime.Parse(dateTo);
+                query = query.Where(e => e.DateTime.Date <= toDate.Date);
+            }
+
+            // Apply sorting
+            switch (sortBy)
+            {
+                case "date_asc":
+                    query = query.OrderBy(e => e.DateTime);
+                    break;
+                case "date_desc":
+                    query = query.OrderByDescending(e => e.DateTime);
+                    break;
+                case "price_asc":
+                    query = query.OrderBy(e => e.Price);
+                    break;
+                case "price_desc":
+                    query = query.OrderByDescending(e => e.Price);
+                    break;
+                case "popularity":
+                    query = query.OrderByDescending(e => e.Registrations.Count);
+                    break;
+                default:
+                    query = query.OrderBy(e => e.DateTime);
+                    break;
+            }
+
+            var events = await query.ToListAsync();
             return View(events);
         }
 
@@ -148,6 +226,13 @@ namespace EventHub.Controllers
         [Authorize]
         public async Task<IActionResult> Register(int id)
         {
+            // Block Admin from registering
+            if (User.IsInRole("Admin"))
+            {
+                TempData["Error"] = "Administrators cannot register for events as attendees.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
             var eventItem = await _context.Events.FindAsync(id);
             if (eventItem == null)
                 return NotFound();
@@ -187,7 +272,6 @@ namespace EventHub.Controllers
             return RedirectToAction(nameof(Details), new { id });
         }
 
-      
         // GET: Event/MyEvents - Regular users can see events they registered for
         [Authorize]
         public async Task<IActionResult> MyEvents()
@@ -209,12 +293,21 @@ namespace EventHub.Controllers
                 .ToListAsync();
 
             return View(myEvents);
-        }        // POST: Event/CancelRegistration/5
+        }
+
+        // POST: Event/CancelRegistration/5
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelRegistration(int id)
         {
+            // Block Admin from canceling (they shouldn't be registered anyway)
+            if (User.IsInRole("Admin"))
+            {
+                TempData["Error"] = "Administrators cannot manage attendee registrations this way.";
+                return RedirectToAction(nameof(Index));
+            }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var registration = await _context.EventRegistrations
@@ -239,7 +332,6 @@ namespace EventHub.Controllers
             TempData["Success"] = "Registration cancelled successfully.";
             return RedirectToAction(nameof(MyEvents));
         }
-
 
         private bool EventExists(int id)
         {

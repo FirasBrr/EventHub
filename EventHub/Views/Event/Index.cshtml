@@ -22,6 +22,51 @@
         padding: 1.5rem;
     }
 
+    .filter-section {
+        border-bottom: 1px solid rgba(0, 210, 255, 0.1);
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+
+        .filter-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+    .filter-title {
+        color: #00d2ff;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    .price-range {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+        .price-range input {
+            width: 100px;
+        }
+
+    .sort-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        background: rgba(0, 210, 255, 0.1);
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-right: 8px;
+        margin-bottom: 8px;
+    }
+
+        .sort-badge:hover, .sort-badge.active {
+            background: rgba(0, 210, 255, 0.3);
+            color: #00d2ff;
+        }
+
     .event-card {
         background: rgba(26, 26, 46, 0.95);
         backdrop-filter: blur(10px);
@@ -148,11 +193,25 @@
             color: white;
         }
 
+    .results-count {
+        color: #00d2ff;
+        font-weight: 500;
+    }
+
+    .clear-filters {
+        color: #dc3545;
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+
+        .clear-filters:hover {
+            text-decoration: underline;
+        }
+
     .bg-gradient {
         background: linear-gradient(135deg, rgba(0,210,255,0.2), rgba(58,123,213,0.2));
     }
 
-    /* Mobile responsive */
     @@media (max-width: 768px) {
         .events-header {
             padding: 2rem 0;
@@ -162,10 +221,14 @@
             padding: 1rem;
         }
 
-        .event-meta {
-            flex-wrap: wrap;
-            gap: 8px;
+        .price-range {
+            flex-direction: column;
+            align-items: stretch;
         }
+
+            .price-range input {
+                width: 100%;
+            }
     }
 </style>
 
@@ -179,20 +242,27 @@
 </div>
 
 <div class="container mb-5">
-    <!-- Filter Section -->
+    <!-- Advanced Filter Section -->
     <div class="filter-card">
-        <form asp-action="Index" method="get" class="row g-3">
-            <div class="col-md-5">
+        <form asp-action="Index" method="get" id="filterForm">
+            <!-- Search Bar -->
+            <div class="filter-section">
                 <div class="input-group">
                     <span class="input-group-text bg-transparent" style="border-color: rgba(0,210,255,0.2); color: #00d2ff;">
                         <i class="bi bi-search"></i>
                     </span>
-                    <input type="text" name="searchTerm" class="form-control search-input"
-                           placeholder="Search by name, location..." value="@ViewBag.CurrentSearchTerm">
+                    <input type="text" name="searchTerm" id="searchTerm" class="form-control search-input"
+                           placeholder="Search by name, description, or location..."
+                           value="@ViewBag.CurrentSearchTerm">
                 </div>
             </div>
-            <div class="col-md-3">
-                <select name="category" class="form-select filter-select">
+
+            <!-- Category Filter -->
+            <div class="filter-section">
+                <div class="filter-title">
+                    <i class="bi bi-tag"></i> Category
+                </div>
+                <select name="category" id="category" class="form-select filter-select">
                     <option value="">All Categories</option>
                     <option value="Conference">Conference</option>
                     <option value="Workshop">Workshop</option>
@@ -201,26 +271,101 @@
                     <option value="Sports">Sports</option>
                 </select>
             </div>
-            <div class="col-md-2">
-                <input type="date" name="date" class="form-control search-input" placeholder="Date">
+
+            <!-- Price Range Filter -->
+            <div class="filter-section">
+                <div class="filter-title">
+                    <i class="bi bi-currency-dollar"></i> Price Range
+                </div>
+                <div class="price-range">
+                    <div class="flex-grow-1">
+                        <label class="small text-muted">Min Price ($)</label>
+                        <input type="number" name="minPrice" id="minPrice" class="form-control search-input"
+                               placeholder="0" value="@ViewBag.MinPrice" step="10">
+                    </div>
+                    <div class="flex-grow-1">
+                        <label class="small text-muted">Max Price ($)</label>
+                        <input type="number" name="maxPrice" id="maxPrice" class="form-control search-input"
+                               placeholder="Any" value="@ViewBag.MaxPrice" step="10">
+                    </div>
+                </div>
+                <div class="form-check mt-2">
+                    <input type="checkbox" name="showFree" id="showFree" class="form-check-input"
+                           value="true" @(ViewBag.ShowFree == true ? "checked" : "")>
+                    <label class="form-check-label text-white" for="showFree">
+                        <i class="bi bi-gift"></i> Show only free events
+                    </label>
+                </div>
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn-view w-100" style="border: none; cursor: pointer;">
-                    <i class="bi bi-search"></i> Search
+
+            <!-- Date Range Filter -->
+            <div class="filter-section">
+                <div class="filter-title">
+                    <i class="bi bi-calendar"></i> Date Range
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="small text-muted">From</label>
+                        <input type="date" name="dateFrom" id="dateFrom" class="form-control search-input"
+                               value="@ViewBag.DateFrom">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small text-muted">To</label>
+                        <input type="date" name="dateTo" id="dateTo" class="form-control search-input"
+                               value="@ViewBag.DateTo">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sorting Options -->
+            <div class="filter-section">
+                <div class="filter-title">
+                    <i class="bi bi-sort-up"></i> Sort By
+                </div>
+                <div>
+                    <div class="sort-badge @(ViewBag.SortBy == "date_asc" ? "active" : "")" data-sort="date_asc">
+                        <i class="bi bi-calendar"></i> Date (Earliest)
+                    </div>
+                    <div class="sort-badge @(ViewBag.SortBy == "date_desc" ? "active" : "")" data-sort="date_desc">
+                        <i class="bi bi-calendar"></i> Date (Latest)
+                    </div>
+                    <div class="sort-badge @(ViewBag.SortBy == "price_asc" ? "active" : "")" data-sort="price_asc">
+                        <i class="bi bi-arrow-up"></i> Price (Low to High)
+                    </div>
+                    <div class="sort-badge @(ViewBag.SortBy == "price_desc" ? "active" : "")" data-sort="price_desc">
+                        <i class="bi bi-arrow-down"></i> Price (High to Low)
+                    </div>
+                    <div class="sort-badge @(ViewBag.SortBy == "popularity" ? "active" : "")" data-sort="popularity">
+                        <i class="bi bi-graph-up"></i> Most Popular
+                    </div>
+                </div>
+                <input type="hidden" name="sortBy" id="sortBy" value="@ViewBag.SortBy">
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <button type="submit" class="btn-view">
+                    <i class="bi bi-search"></i> Apply Filters
                 </button>
+                <a href="/Event" class="clear-filters">
+                    <i class="bi bi-x-circle"></i> Clear All Filters
+                </a>
             </div>
         </form>
     </div>
 
-    <!-- Create Event Button for Admin -->
-    @if (User.IsInRole("Admin"))
-    {
-        <div class="text-end mb-3">
+    <!-- Results Count -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="results-count">
+            <i class="bi bi-calendar-check"></i> Found <strong>@Model.Count()</strong> events
+        </div>
+        @if (User.IsInRole("Admin"))
+        {
             <a asp-action="Create" class="btn-view">
                 <i class="bi bi-plus-circle"></i> Create New Event
             </a>
-        </div>
-    }
+        }
+    </div>
 
     <!-- Events Grid -->
     @if (!Model.Any())
@@ -228,11 +373,8 @@
         <div class="empty-state">
             <i class="bi bi-calendar-x"></i>
             <h3 class="text-white">No events found</h3>
-            <p class="text-muted">Try adjusting your search or check back later for new events.</p>
-            @if (User.IsInRole("Admin"))
-            {
-                <a asp-action="Create" class="btn-view mt-3" style="display: inline-block;">Create First Event</a>
-            }
+            <p class="text-muted">Try adjusting your filters or check back later for new events.</p>
+            <a href="/Event" class="btn-view mt-3" style="display: inline-block;">Clear Filters</a>
         </div>
     }
     else
@@ -318,7 +460,32 @@
 @section Scripts {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <script>
+        // Sort badge click handler
+        document.querySelectorAll('.sort-badge').forEach(badge => {
+            badge.addEventListener('click', function() {
+                const sortValue = this.getAttribute('data-sort');
+                document.getElementById('sortBy').value = sortValue;
+                document.getElementById('filterForm').submit();
+            });
+        });
+
+        // Auto-submit on checkbox change
+        document.getElementById('showFree').addEventListener('change', function() {
+            document.getElementById('filterForm').submit();
+        });
+
+        // Debounced search (optional - submits after typing stops)
+        let searchTimeout;
+        document.getElementById('searchTerm').addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                document.getElementById('filterForm').submit();
+            }, 500);
+        });
+
+        // Map initialization for mini maps
         @foreach (var item in Model.Where(e => e.Latitude.HasValue && e.Longitude.HasValue))
         {
                 <text>

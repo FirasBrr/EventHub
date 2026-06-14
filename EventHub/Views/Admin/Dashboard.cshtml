@@ -1,0 +1,378 @@
+﻿@model EventHub.ViewModels.AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard - EventHub";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .dashboard-header {
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: rgba(26, 26, 46, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 210, 255, 0.5);
+        }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        background: rgba(0, 210, 255, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+        .stat-icon i {
+            font-size: 1.5rem;
+            color: #00d2ff;
+        }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        color: #a0a0b0;
+        font-size: 0.85rem;
+    }
+
+    .stat-change {
+        font-size: 0.75rem;
+        margin-top: 0.5rem;
+    }
+
+        .stat-change.positive {
+            color: #28a745;
+        }
+
+        .stat-change.negative {
+            color: #dc3545;
+        }
+
+    .dashboard-card {
+        background: rgba(26, 26, 46, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        padding: 1.5rem;
+        height: 100%;
+    }
+
+    .card-title {
+        color: #00d2ff;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(0, 210, 255, 0.2);
+    }
+
+    .event-item, .registration-item {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        transition: all 0.3s ease;
+    }
+
+        .event-item:hover, .registration-item:hover {
+            background: rgba(0, 210, 255, 0.05);
+            padding-left: 10px;
+        }
+
+    .category-bar {
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+        height: 8px;
+        overflow: hidden;
+        margin: 5px 0;
+    }
+
+    .category-fill {
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.3s ease;
+    }
+
+    .btn-action {
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        border: none;
+        font-size: 0.85rem;
+    }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+            color: white;
+        }
+
+    .status-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    .status-active {
+        background: rgba(40, 167, 69, 0.2);
+        color: #28a745;
+    }
+
+    .status-inactive {
+        background: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+    }
+
+    .status-upcoming {
+        background: rgba(0, 210, 255, 0.2);
+        color: #00d2ff;
+    }
+
+    .view-all-link {
+        color: #00d2ff;
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+
+        .view-all-link:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="dashboard-header">
+    <div class="container">
+        <h1 class="text-white mb-2">
+            <i class="bi bi-speedometer2"></i> Admin Dashboard
+        </h1>
+        <p class="text-white opacity-75">Welcome back, Admin! Here's what's happening with your events.</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+                <div class="stat-value">@Model.TotalEvents</div>
+                <div class="stat-label">Total Events</div>
+                <div class="stat-change positive">
+                    <i class="bi bi-arrow-up"></i> @Model.EventsThisMonth this month
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <div class="stat-value">@Model.ActiveEvents</div>
+                <div class="stat-label">Active Events</div>
+                <div class="stat-change positive">
+                    <i class="bi bi-calendar"></i> Upcoming
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div class="stat-value">@Model.TotalUsers</div>
+                <div class="stat-label">Total Users</div>
+                <div class="stat-change positive">
+                    <i class="bi bi-person-plus"></i> Active members
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-ticket"></i>
+                </div>
+                <div class="stat-value">@Model.TotalRegistrations</div>
+                <div class="stat-label">Total Registrations</div>
+                <div class="stat-change positive">
+                    <i class="bi bi-arrow-up"></i> @Model.RegistrationsThisMonth this month
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-currency-dollar"></i>
+                </div>
+                <div class="stat-value">@Model.TotalRevenue.ToString("C0")</div>
+                <div class="stat-label">Total Revenue</div>
+                <div class="stat-change positive">
+                    <i class="bi bi-graph-up"></i> From paid events
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-graph-up"></i>
+                </div>
+                <div class="stat-value">@(Model.TotalRegistrations > 0 ? (Model.TotalRegistrations / Model.TotalEvents).ToString("F1") : "0")</div>
+                <div class="stat-label">Avg Registrations/Event</div>
+                <div class="stat-change positive">
+                    <i class="bi bi-ticket"></i> Per event
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Recent Events -->
+        <div class="col-lg-6">
+            <div class="dashboard-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-clock-history"></i> Recent Events
+                    </h5>
+                    <a asp-action="ManageEvents" class="view-all-link">View All →</a>
+                </div>
+
+                @foreach (var eventItem in Model.RecentEvents)
+                {
+                    <div class="event-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <strong class="text-white">@eventItem.Name</strong>
+                                    <span class="status-badge @(eventItem.IsActive ? "status-active" : "status-inactive")">
+                                        @(eventItem.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </div>
+                                <div class="small text-muted">
+                                    <i class="bi bi-calendar"></i> @eventItem.DateTime.ToString("MMM dd, yyyy")
+                                    <span class="mx-2">•</span>
+                                    <i class="bi bi-people"></i> @eventItem.RegistrationsCount/@eventItem.Capacity registered
+                                </div>
+                            </div>
+                            <a asp-controller="Event" asp-action="Details" asp-route-id="@eventItem.Id"
+                               class="text-info ms-2" style="text-decoration: none;">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Recent Registrations -->
+        <div class="col-lg-6">
+            <div class="dashboard-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-activity"></i> Recent Registrations
+                    </h5>
+                </div>
+
+                @foreach (var reg in Model.RecentRegistrations)
+                {
+                    <div class="registration-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-white">
+                                    <i class="bi bi-person-circle"></i> @reg.UserName
+                                </div>
+                                <div class="small text-muted">
+                                    <i class="bi bi-calendar-event"></i> @reg.EventName
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="small text-muted">
+                                    @reg.RegisteredAt.ToString("MMM dd, h:mm tt")
+                                </div>
+                                <span class="status-badge status-upcoming">Registered</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (!Model.RecentRegistrations.Any())
+                {
+                    <p class="text-muted text-center py-3">No recent registrations</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-2">
+        <!-- Popular Categories -->
+        <div class="col-md-6">
+            <div class="dashboard-card">
+                <h5 class="card-title">
+                    <i class="bi bi-tags"></i> Popular Categories
+                </h5>
+
+                @foreach (var category in Model.PopularCategories)
+                {
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-white">@category.Category</span>
+                            <span class="text-muted small">@category.Count events (@category.Percentage%)</span>
+                        </div>
+                        <div class="category-bar">
+                            <div class="category-fill" style="width: @category.Percentage%"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-md-6">
+            <div class="dashboard-card">
+                <h5 class="card-title">
+                    <i class="bi bi-lightning"></i> Quick Actions
+                </h5>
+
+                <div class="d-grid gap-3">
+                    <a asp-controller="Event" asp-action="Create" class="btn-action text-center">
+                        <i class="bi bi-plus-circle"></i> Create New Event
+                    </a>
+                    <a asp-action="ManageEvents" class="btn-action text-center" style="background: #6c757d;">
+                        <i class="bi bi-gear"></i> Manage All Events
+                    </a>
+                    <a asp-action="ManageUsers" class="btn-action text-center" style="background: #6c757d;">
+                        <i class="bi bi-people"></i> Manage Users
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

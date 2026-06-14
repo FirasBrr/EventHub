@@ -1,0 +1,297 @@
+﻿@model EventHub.ViewModels.ProfileViewModel
+@using Microsoft.AspNetCore.Identity
+
+@{
+    ViewData["Title"] = "My Profile - EventHub";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .profile-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        padding: 2rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 3rem;
+        color: white;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: rgba(26, 26, 46, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 210, 255, 0.5);
+        }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .stat-label {
+        color: #a0a0b0;
+        margin-top: 0.5rem;
+    }
+
+    .profile-card {
+        background: rgba(26, 26, 46, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .password-card {
+        background: rgba(26, 26, 46, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 193, 7, 0.3);
+        padding: 2rem;
+    }
+
+    .password-header {
+        border-bottom: 1px solid rgba(255, 193, 7, 0.3);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+        .password-header h3 {
+            color: #ffc107;
+        }
+
+    .form-label {
+        color: #00d2ff;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        background: rgba(26, 26, 46, 0.9);
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        color: white;
+        padding: 0.75rem 1rem;
+    }
+
+        .form-control:focus {
+            background: rgba(26, 26, 46, 1);
+            border-color: #00d2ff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 210, 255, 0.25);
+            color: white;
+        }
+
+    .btn-save {
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        color: white;
+        padding: 10px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 210, 255, 0.4);
+        }
+
+    .btn-change-password {
+        background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        color: #1a1a2e;
+        padding: 10px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+        .btn-change-password:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 193, 7, 0.4);
+        }
+
+    .info-text {
+        background: rgba(0, 210, 255, 0.1);
+        border-left: 4px solid #00d2ff;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-top: 1rem;
+    }
+
+    .text-danger {
+        color: #ff6666 !important;
+        font-size: 0.8rem;
+    }
+
+    hr {
+        border-color: rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+</style>
+
+<div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <i class="bi bi-person-circle"></i>
+        </div>
+        <h1 class="text-white mb-2">@Model.FirstName @Model.LastName</h1>
+        <p class="text-white opacity-75">@Model.Email</p>
+        <p class="text-white opacity-75 small">
+            <i class="bi bi-calendar"></i> Member since @Model.CreatedAt.ToString("MMMM yyyy")
+        </p>
+    </div>
+
+    <!-- Statistics -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">@Model.TotalEventsAttended</div>
+            <div class="stat-label">Events Attended</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@Model.UpcomingEventsCount</div>
+            <div class="stat-label">Upcoming Events</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@((DateTime.Now - Model.CreatedAt).Days)</div>
+            <div class="stat-label">Days with EventHub</div>
+        </div>
+    </div>
+
+    <!-- Profile Edit Form -->
+    <div class="profile-card">
+        <h3 class="text-white mb-4">
+            <i class="bi bi-pencil-square"></i> Edit Profile Information
+        </h3>
+
+        <form asp-action="Profile" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="background: rgba(255,0,0,0.1); border: none;"></div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FirstName" class="form-label">
+                        <i class="bi bi-person"></i> First Name
+                    </label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LastName" class="form-label">
+                        <i class="bi bi-person"></i> Last Name
+                    </label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Username" class="form-label">
+                    <i class="bi bi-person-badge"></i> Username
+                </label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">
+                    <i class="bi bi-envelope"></i> Email Address
+                </label>
+                <input asp-for="Email" class="form-control" type="email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            
+
+            <div class="mt-4">
+                <button type="submit" class="btn-save">
+                    <i class="bi bi-save"></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Change Password Section -->
+    <div class="password-card">
+        <div class="password-header">
+            <h3 class="mb-0">
+                <i class="bi bi-key"></i> Change Password
+            </h3>
+            <p class="text-muted small mt-1">Update your account password</p>
+        </div>
+
+        <form asp-action="ChangePassword" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="background: rgba(255,0,0,0.1); border: none;"></div>
+
+            <div class="mb-3">
+                <label for="CurrentPassword" class="form-label">
+                    <i class="bi bi-shield-lock"></i> Current Password
+                </label>
+                <input type="password" name="CurrentPassword" id="CurrentPassword" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="NewPassword" class="form-label">
+                    <i class="bi bi-lock"></i> New Password
+                </label>
+                <input type="password" name="NewPassword" id="NewPassword" class="form-control" required />
+                <small class="text-muted">Password must be at least 6 characters with uppercase letter and number</small>
+            </div>
+
+            <div class="mb-3">
+                <label for="ConfirmPassword" class="form-label">
+                    <i class="bi bi-check-circle"></i> Confirm New Password
+                </label>
+                <input type="password" name="ConfirmPassword" id="ConfirmPassword" class="form-control" required />
+            </div>
+
+            <div class="mt-3">
+                <button type="submit" class="btn-change-password">
+                    <i class="bi bi-key"></i> Update Password
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
