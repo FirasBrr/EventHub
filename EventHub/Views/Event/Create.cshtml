@@ -1,0 +1,213 @@
+﻿@model EventHub.Models.Event
+
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3>Create New Event</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label"></label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DateTime" class="form-label"></label>
+                                <input asp-for="DateTime" class="form-control" type="datetime-local" />
+                                <span asp-validation-for="DateTime" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Category" class="form-label"></label>
+                                <select asp-for="Category" class="form-select">
+                                    <option>Conference</option>
+                                    <option>Workshop</option>
+                                    <option>Music</option>
+                                    <option>Networking</option>
+                                    <option>Sports</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FullAddress" class="form-label"></label>
+                            <input asp-for="FullAddress" id="addressInput" class="form-control"
+                                   placeholder="Enter full address (will auto-fill coordinates)" />
+                            <span asp-validation-for="FullAddress" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Latitude" class="form-label"></label>
+                                <input asp-for="Latitude" id="latitude" class="form-control" readonly />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Longitude" class="form-label"></label>
+                                <input asp-for="Longitude" id="longitude" class="form-control" readonly />
+                            </div>
+                        </div>
+
+                        <!-- Map for location selection -->
+                        <div class="mb-3">
+                            <label>Click on map to select location</label>
+                            <div id="map" style="height: 400px; width: 100%;"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Capacity" class="form-label"></label>
+                                <input asp-for="Capacity" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Price" class="form-label"></label>
+                                <input asp-for="Price" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input asp-for="IsFree" class="form-check-input" id="isFreeCheckbox" />
+                            <label asp-for="IsFree" class="form-check-label"></label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Create Event</button>
+                        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5>Location Tips</h5>
+                </div>
+                <div class="card-body">
+                    <p>You can:</p>
+                    <ul>
+                        <li>Enter address manually</li>
+                        <li>Click on the map to set location</li>
+                        <li>Coordinates auto-fill</li>
+                    </ul>
+                    <hr />
+                    <div id="selectedLocationInfo">
+                        <strong>Selected Location:</strong><br />
+                        <span id="selectedLat">-</span>, <span id="selectedLng">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        var map;
+        var marker;
+
+        // Initialize map
+        function initMap() {
+            // Default center (can be your city)
+            map = L.map('map').setView([40.7128, -74.0060], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            // Add click handler
+            map.on('click', function(e) {
+                var lat = e.latlng.lat;
+                var lng = e.latlng.lng;
+
+                // Update form fields
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+                document.getElementById('selectedLat').innerText = lat.toFixed(6);
+                document.getElementById('selectedLng').innerText = lng.toFixed(6);
+
+                // Add or move marker
+                if (marker) {
+                    marker.setLatLng(e.latlng);
+                } else {
+                    marker = L.marker(e.latlng).addTo(map);
+                }
+
+                // Reverse geocode (optional - get address from coordinates)
+                reverseGeocode(lat, lng);
+            });
+        }
+
+        function reverseGeocode(lat, lng) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name) {
+                        document.getElementById('addressInput').value = data.display_name;
+                        document.getElementById('FullAddress').value = data.display_name;
+                    }
+                })
+                .catch(error => console.log('Geocoding error:', error));
+        }
+
+        // Geocode address to coordinates
+        document.getElementById('addressInput').addEventListener('blur', function() {
+            var address = this.value;
+            if (address) {
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.length > 0) {
+                            var lat = data[0].lat;
+                            var lng = data[0].lon;
+
+                            document.getElementById('latitude').value = lat;
+                            document.getElementById('longitude').value = lng;
+                            document.getElementById('selectedLat').innerText = lat;
+                            document.getElementById('selectedLng').innerText = lng;
+
+                            // Update map
+                            map.setView([lat, lng], 15);
+                            if (marker) {
+                                marker.setLatLng([lat, lng]);
+                            } else {
+                                marker = L.marker([lat, lng]).addTo(map);
+                            }
+                        }
+                    });
+            }
+        });
+
+        document.getElementById('isFreeCheckbox').addEventListener('change', function() {
+            var priceInput = document.querySelector('#Price');
+            if (this.checked) {
+                priceInput.value = 0;
+                priceInput.readOnly = true;
+            } else {
+                priceInput.readOnly = false;
+            }
+        });
+
+        initMap();
+    </script>
+}

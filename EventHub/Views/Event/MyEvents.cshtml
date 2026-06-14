@@ -1,0 +1,37 @@
+﻿@model IEnumerable<EventHub.Models.Event>
+
+@{
+    ViewData["Title"] = "My Events";
+}
+
+<div class="container mt-4">
+    <h1><i class="bi bi-star"></i> My Registered Events</h1>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info mt-4">
+            You haven't registered for any events yet.
+            <a href="/Event">Browse events</a> to find something interesting!
+        </div>
+    }
+    else
+    {
+        <div class="row mt-4">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text">
+                                <i class="bi bi-calendar"></i> @item.DateTime.ToString("MMM dd, yyyy - h:mm tt")<br />
+                                <i class="bi bi-geo-alt"></i> @item.Location
+                            </p>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">View Event</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

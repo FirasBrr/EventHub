@@ -1,0 +1,588 @@
+﻿@{
+    ViewData["Title"] = "EventHub - Discover Amazing Events";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Hero Section with Background -->
+<section class="hero-section position-relative text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 80vh;">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-lg-6 animate__animated animate__fadeInLeft">
+                <h1 class="display-3 fw-bold mb-4">
+                    Discover Amazing <br />
+                    <span class="text-warning">Events Near You</span>
+                </h1>
+                <p class="lead mb-4">
+                    Join thousands of people discovering exciting events, workshops, concerts,
+                    and networking opportunities. Your next great experience starts here.
+                </p>
+                <div class="d-flex gap-3">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <a href="/Event" class="btn btn-light btn-lg px-5 py-3 fw-bold">
+                            <i class="bi bi-calendar-event"></i> Browse Events
+                        </a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a href="/Event/Create" class="btn btn-outline-light btn-lg px-5 py-3">
+                                <i class="bi bi-plus-circle"></i> Create Event
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <a href="/Account/Register" class="btn btn-light btn-lg px-5 py-3 fw-bold">
+                            Get Started Free
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                        <a href="/Account/Login" class="btn btn-outline-light btn-lg px-5 py-3">
+                            Sign In
+                        </a>
+                    }
+                </div>
+
+                <!-- Stats -->
+                <div class="row mt-5 g-4">
+                    <div class="col-4">
+                        <div class="stat-box">
+                            <h3 class="display-6 fw-bold mb-0">500+</h3>
+                            <p class="mb-0">Events Hosted</p>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-box">
+                            <h3 class="display-6 fw-bold mb-0">10K+</h3>
+                            <p class="mb-0">Happy Attendees</p>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-box">
+                            <h3 class="display-6 fw-bold mb-0">50+</h3>
+                            <p class="mb-0">Cities</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block animate__animated animate__fadeInRight">
+                <div class="hero-image text-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Events" class="img-fluid" style="filter: drop-shadow(0 20px 30px rgba(0,0,0,0.2));">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wave-bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#ffffff" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+        </svg>
+    </div>
+</section>
+
+<!-- Search Section -->
+<section class="search-section py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-4">
+                        <h3 class="text-center mb-4">Find Your Perfect Event</h3>
+                        <form action="/Event" method="get" class="row g-3">
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0">
+                                        <i class="bi bi-search text-primary"></i>
+                                    </span>
+                                    <input type="text" name="searchTerm" class="form-control border-start-0"
+                                           placeholder="Search events, categories, locations...">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="category" class="form-select">
+                                    <option value="">All Categories</option>
+                                    <option>Conference</option>
+                                    <option>Workshop</option>
+                                    <option>Music</option>
+                                    <option>Networking</option>
+                                    <option>Sports</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="date" name="date" class="form-control" placeholder="Date">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-search"></i> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Events Section -->
+<section class="featured-events py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Featured Events</h2>
+            <p class="lead text-muted">Discover the most popular events this week</p>
+            <div class="divider mx-auto"></div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Event Card 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="event-card card h-100 border-0 shadow-sm hover-scale">
+                    <div class="card-img-top-wrapper">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400"
+                             class="card-img-top" alt="Tech Conference" style="height: 200px; object-fit: cover;">
+                        <span class="event-badge bg-danger">Popular</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="event-date mb-2">
+                            <i class="bi bi-calendar-event text-primary"></i>
+                            <span class="text-muted">March 15, 2024 • 10:00 AM</span>
+                        </div>
+                        <h5 class="card-title fw-bold">Annual Tech Conference 2024</h5>
+                        <p class="card-text text-muted">Join industry leaders for a day of innovation and networking...</p>
+                        <div class="event-meta">
+                            <span><i class="bi bi-geo-alt"></i> Convention Center</span>
+                            <span><i class="bi bi-people"></i> 200+ attending</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag fw-bold text-primary">$99.99</span>
+                            <a href="/Event/Details/1" class="btn btn-outline-primary btn-sm">View Details →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Card 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="event-card card h-100 border-0 shadow-sm hover-scale">
+                    <div class="card-img-top-wrapper">
+                        <img src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400"
+                             class="card-img-top" alt="Music Festival" style="height: 200px; object-fit: cover;">
+                        <span class="event-badge bg-success">Free</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="event-date mb-2">
+                            <i class="bi bi-calendar-event text-primary"></i>
+                            <span class="text-muted">March 20, 2024 • 6:00 PM</span>
+                        </div>
+                        <h5 class="card-title fw-bold">Summer Music Festival</h5>
+                        <p class="card-text text-muted">Live performances from top artists in an outdoor setting...</p>
+                        <div class="event-meta">
+                            <span><i class="bi bi-geo-alt"></i> City Park</span>
+                            <span><i class="bi bi-people"></i> 500+ attending</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag fw-bold text-success">FREE</span>
+                            <a href="/Event/Details/2" class="btn btn-outline-primary btn-sm">View Details →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Card 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="event-card card h-100 border-0 shadow-sm hover-scale">
+                    <div class="card-img-top-wrapper">
+                        <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400"
+                             class="card-img-top" alt="Workshop" style="height: 200px; object-fit: cover;">
+                        <span class="event-badge bg-info">Limited</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="event-date mb-2">
+                            <i class="bi bi-calendar-event text-primary"></i>
+                            <span class="text-muted">March 25, 2024 • 9:00 AM</span>
+                        </div>
+                        <h5 class="card-title fw-bold">Digital Marketing Workshop</h5>
+                        <p class="card-text text-muted">Learn the latest strategies in digital marketing from experts...</p>
+                        <div class="event-meta">
+                            <span><i class="bi bi-geo-alt"></i> Business Center</span>
+                            <span><i class="bi bi-people"></i> 50+ attending</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag fw-bold text-primary">$49.99</span>
+                            <a href="/Event/Details/3" class="btn btn-outline-primary btn-sm">View Details →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="/Event" class="btn btn-primary btn-lg px-5">
+                Browse All Events
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Browse by Category</h2>
+            <p class="lead text-muted">Find events that match your interests</p>
+            <div class="divider mx-auto"></div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="category-card text-center p-4 bg-white rounded-4 shadow-sm hover-lift">
+                    <div class="category-icon mb-3">
+                        <i class="bi bi-mic display-1 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold">Conferences</h5>
+                    <p class="text-muted small">Tech, Business & More</p>
+                    <span class="badge bg-primary">24 Events</span>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="category-card text-center p-4 bg-white rounded-4 shadow-sm hover-lift">
+                    <div class="category-icon mb-3">
+                        <i class="bi bi-music-note display-1 text-success"></i>
+                    </div>
+                    <h5 class="fw-bold">Music</h5>
+                    <p class="text-muted small">Concerts & Festivals</p>
+                    <span class="badge bg-success">18 Events</span>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="category-card text-center p-4 bg-white rounded-4 shadow-sm hover-lift">
+                    <div class="category-icon mb-3">
+                        <i class="bi bi-briefcase display-1 text-info"></i>
+                    </div>
+                    <h5 class="fw-bold">Workshops</h5>
+                    <p class="text-muted small">Learn & Grow</p>
+                    <span class="badge bg-info">32 Events</span>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="category-card text-center p-4 bg-white rounded-4 shadow-sm hover-lift">
+                    <div class="category-icon mb-3">
+                        <i class="bi bi-people display-1 text-warning"></i>
+                    </div>
+                    <h5 class="fw-bold">Networking</h5>
+                    <p class="text-muted small">Meet & Connect</p>
+                    <span class="badge bg-warning">15 Events</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">How EventHub Works</h2>
+            <p class="lead text-muted">Simple steps to start your event journey</p>
+            <div class="divider mx-auto"></div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="step-card text-center">
+                    <div class="step-number mx-auto mb-3">1</div>
+                    <div class="step-icon mb-3">
+                        <i class="bi bi-person-plus display-3 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold">Create Account</h5>
+                    <p class="text-muted">Sign up for free and join our community of event enthusiasts</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card text-center">
+                    <div class="step-number mx-auto mb-3">2</div>
+                    <div class="step-icon mb-3">
+                        <i class="bi bi-search display-3 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold">Discover Events</h5>
+                    <p class="text-muted">Browse through hundreds of events matching your interests</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card text-center">
+                    <div class="step-number mx-auto mb-3">3</div>
+                    <div class="step-icon mb-3">
+                        <i class="bi bi-ticket-perforated display-3 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold">Register & Attend</h5>
+                    <p class="text-muted">Book your spot and enjoy amazing experiences</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">What Our Users Say</h2>
+            <p class="lead text-muted">Trusted by thousands of event organizers and attendees</p>
+            <div class="divider mx-auto"></div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="testimonial-card bg-white p-4 rounded-4 shadow-sm">
+                    <div class="quote-icon mb-3">
+                        <i class="bi bi-quote display-1 text-primary opacity-25"></i>
+                    </div>
+                    <p class="mb-3">"EventHub made it so easy to find and register for local events. The map feature is incredibly useful!"</p>
+                    <div class="d-flex align-items-center">
+                        <img src="https://randomuser.me/api/portraits/women/1.jpg" class="rounded-circle me-3" width="50" height="50">
+                        <div>
+                            <h6 class="mb-0 fw-bold">Sarah Johnson</h6>
+                            <small class="text-muted">Event Attendee</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card bg-white p-4 rounded-4 shadow-sm">
+                    <div class="quote-icon mb-3">
+                        <i class="bi bi-quote display-1 text-primary opacity-25"></i>
+                    </div>
+                    <p class="mb-3">"As an organizer, EventHub has streamlined our event management process significantly."</p>
+                    <div class="d-flex align-items-center">
+                        <img src="https://randomuser.me/api/portraits/men/2.jpg" class="rounded-circle me-3" width="50" height="50">
+                        <div>
+                            <h6 class="mb-0 fw-bold">Michael Chen</h6>
+                            <small class="text-muted">Event Organizer</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card bg-white p-4 rounded-4 shadow-sm">
+                    <div class="quote-icon mb-3">
+                        <i class="bi bi-quote display-1 text-primary opacity-25"></i>
+                    </div>
+                    <p class="mb-3">"The best platform for discovering unique events in my city. Highly recommended!"</p>
+                    <div class="d-flex align-items-center">
+                        <img src="https://randomuser.me/api/portraits/women/3.jpg" class="rounded-circle me-3" width="50" height="50">
+                        <div>
+                            <h6 class="mb-0 fw-bold">Emily Rodriguez</h6>
+                            <small class="text-muted">Regular User</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter-section py-5">
+    <div class="container">
+        <div class="card bg-gradient-primary border-0 rounded-4 shadow-lg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body p-5 text-center text-white">
+                <h3 class="display-6 fw-bold mb-3">Stay Updated!</h3>
+                <p class="lead mb-4">Subscribe to our newsletter and never miss an event</p>
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control form-control-lg" placeholder="Enter your email address">
+                            <button class="btn btn-light btn-lg" type="button">
+                                Subscribe <i class="bi bi-send"></i>
+                            </button>
+                        </div>
+                        <small>No spam, unsubscribe anytime.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <style>
+        /* Animation */
+        .animate__animated {
+            animation-duration: 1s;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave-bottom {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            line-height: 0;
+        }
+
+        /* Event Cards */
+        .event-card {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .hover-scale:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+        }
+
+        .card-img-top-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 10px;
+        }
+
+            .event-meta i {
+                margin-right: 5px;
+            }
+
+        .price-tag {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Category Cards */
+        .category-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .category-icon i {
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover .category-icon i {
+            transform: scale(1.1);
+        }
+
+        /* Step Cards */
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Testimonial Cards */
+        .testimonial-card {
+            position: relative;
+        }
+
+        .quote-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        /* Divider */
+        .divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+
+        /* Stat Boxes */
+        .stat-box {
+            text-align: center;
+            border-right: 1px solid rgba(255,255,255,0.2);
+        }
+
+            .stat-box:last-child {
+                border-right: none;
+            }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .hero-section {
+                min-height: 60vh;
+            }
+
+            .display-3 {
+                font-size: 2rem;
+            }
+
+            .stat-box {
+                border-right: none;
+            }
+        }
+
+        /* Gradients */
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+}
+
+@section Scripts {
+    <script>
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate__fadeInUp');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.event-card, .category-card, .step-card, .testimonial-card').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+
+        // Add animation class when elements become visible
+        document.querySelectorAll('.event-card, .category-card, .step-card, .testimonial-card').forEach(el => {
+            el.classList.add('animate__animated');
+        });
+    </script>
+}
