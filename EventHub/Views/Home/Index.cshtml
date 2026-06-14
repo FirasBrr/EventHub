@@ -4,422 +4,741 @@
 }
 
 <style>
-    /* Dark Theme Styles for Home Page */
-    .hero-section {
+    :root {
+        --bg: #f0f4f8;
+        --bg2: #ffffff;
+        --bg3: #ffffff;
+        --bg4: #f8fafc;
+        --border: rgba(0, 0, 0, 0.06);
+        --border2: rgba(59, 130, 246, 0.2);
+        --accent-blue: #3b82f6;
+        --accent-red: #ef4444;
+        --accent2: #3b82f6;
+        --white: #1e293b;
+        --hi: #1e293b;
+        --mid: #64748b;
+        --lo: #94a3b8;
+        --r: 10px;
+        --r2: 16px;
+    }
+
+    /* ── HERO ───────────────────────────────── */
+    .hero {
+        background: linear-gradient(135deg, #eff6ff 0%, #f0f4f8 100%);
+        padding: 96px 0 80px;
         position: relative;
         overflow: hidden;
-        background: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #16213e 100%);
-        min-height: 85vh;
     }
 
-    .btn-custom-primary {
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        color: white;
-        border: none;
-        transition: all 0.3s ease;
-    }
-
-        .btn-custom-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3);
-            color: white;
-        }
-
-    .btn-custom-outline {
-        background: transparent;
-        border: 2px solid #00d2ff;
-        color: #00d2ff;
-        transition: all 0.3s ease;
-    }
-
-        .btn-custom-outline:hover {
-            background: rgba(0, 210, 255, 0.1);
-            transform: translateY(-2px);
-            color: #00d2ff;
-        }
-
-    .stat-box {
-        text-align: center;
-        border-right: 1px solid rgba(0, 210, 255, 0.3);
-    }
-
-        .stat-box:last-child {
-            border-right: none;
-        }
-
-    .search-card {
-        background: rgba(26, 26, 46, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        border: 1px solid rgba(0, 210, 255, 0.2);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    }
-
-    .event-card {
-        background: rgba(26, 26, 46, 0.95);
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
-        overflow: hidden;
-        border-radius: 15px;
-        border: 1px solid rgba(0, 210, 255, 0.1);
-    }
-
-        .event-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(0, 210, 255, 0.5);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3) !important;
-        }
-
-    .event-meta i {
-        color: #00d2ff;
-    }
-
-    .price-tag {
-        font-size: 1.3rem;
-        font-weight: bold;
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .category-card {
-        background: rgba(26, 26, 46, 0.95);
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
-        cursor: pointer;
-        border-radius: 15px;
-        border: 1px solid rgba(0, 210, 255, 0.1);
-    }
-
-        .category-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(0, 210, 255, 0.5);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-        }
-
-    .step-number {
-        width: 60px;
-        height: 60px;
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        color: white;
+    .hero-bg-blob {
+        position: absolute;
         border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+    }
+
+    .blob1 {
+        width: 500px;
+        height: 500px;
+        background: rgba(59, 130, 246, 0.12);
+        top: -150px;
+        right: -100px;
+    }
+
+    .blob2 {
+        width: 300px;
+        height: 300px;
+        background: rgba(239, 68, 68, 0.08);
+        bottom: -80px;
+        left: -60px;
+    }
+
+    .hero-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        background: rgba(59, 130, 246, 0.08);
+        border-radius: 100px;
+        padding: 5px 14px 5px 8px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--accent-blue);
+        letter-spacing: 0.01em;
+        margin-bottom: 26px;
+    }
+
+    .hero-label-dot {
+        width: 7px;
+        height: 7px;
+        background: var(--accent-blue);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+
+    @@keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 0.5;
+            transform: scale(0.85);
+        }
+    }
+
+    .hero h1 {
+        font-family: 'Syne', sans-serif;
+        font-size: clamp(2.8rem, 5.5vw, 4.4rem);
+        font-weight: 800;
+        line-height: 1.06;
+        letter-spacing: -0.04em;
+        color: var(--white);
+        margin-bottom: 22px;
+    }
+
+        .hero h1 .hl {
+            background: linear-gradient(135deg, #3b82f6 0%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+    .hero-desc {
+        font-size: 1.05rem;
+        line-height: 1.75;
+        color: var(--mid);
+        max-width: 480px;
+        margin-bottom: 38px;
+    }
+
+    .btn-fill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--accent-blue);
+        color: #fff !important;
+        font-weight: 700;
+        font-size: 0.9rem;
+        padding: 13px 28px;
+        border-radius: var(--r);
+        text-decoration: none !important;
+        border: none;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+        .btn-fill:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+    .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: transparent;
+        color: var(--white) !important;
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 13px 26px;
+        border-radius: var(--r);
+        text-decoration: none !important;
+        border: 1px solid var(--border);
+        transition: all 0.2s;
+    }
+
+        .btn-outline:hover {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.08);
+            color: var(--accent-blue) !important;
+        }
+
+    .hero-stats {
+        display: flex;
+        gap: 0;
+        margin-top: 52px;
+        padding-top: 36px;
+        border-top: 1px solid var(--border);
+    }
+
+    .stat {
+        flex: 1;
+        padding-right: 32px;
+        border-right: 1px solid var(--border);
+        margin-right: 32px;
+    }
+
+        .stat:last-child {
+            border-right: none;
+            margin-right: 0;
+            padding-right: 0;
+        }
+
+    .stat-num {
+        font-family: 'Syne', sans-serif;
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--white);
+        letter-spacing: -0.03em;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 0.78rem;
+        color: var(--lo);
+        margin-top: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    /* ── SEARCH ─────────────────────────────── */
+    .search-wrap {
+        background: var(--bg);
+        padding-bottom: 64px;
+    }
+
+    .search-box {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--r2);
+        padding: 28px 28px 24px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .search-title {
+        font-family: 'Syne', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--white);
+        margin-bottom: 18px;
+    }
+
+    .search-box .form-control,
+    .search-box .form-select {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        color: var(--white);
+        border-radius: var(--r);
+        padding: 11px 16px;
+        font-size: 0.875rem;
+        font-family: 'DM Sans', sans-serif;
+        height: 46px;
+        transition: all 0.2s;
+    }
+
+        .search-box .form-control::placeholder {
+            color: var(--lo);
+        }
+
+        .search-box .form-control:focus,
+        .search-box .form-select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: var(--bg3);
+            color: var(--white);
+        }
+
+        .search-box .form-select option {
+            background: var(--bg3);
+        }
+
+    .search-box .input-group-text {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-right: none;
+        color: var(--lo);
+        height: 46px;
+        border-radius: var(--r) 0 0 var(--r);
+    }
+
+    .search-box .input-group .form-control {
+        border-left: none;
+        border-radius: 0 var(--r) var(--r) 0;
+    }
+
+    /* ── SECTION COMMONS ────────────────────── */
+    .section {
+        padding: 80px 0;
+    }
+
+    .section-alt {
+        background: #ffffff;
+    }
+
+    .eyebrow {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--accent-blue);
+        margin-bottom: 10px;
+    }
+
+    .section-title {
+        font-family: 'Syne', sans-serif;
+        font-size: clamp(1.7rem, 3vw, 2.3rem);
+        font-weight: 800;
+        color: var(--white);
+        letter-spacing: -0.03em;
+        margin-bottom: 10px;
+    }
+
+    .section-sub {
+        color: var(--mid);
+        font-size: 0.95rem;
+        line-height: 1.65;
+    }
+
+    /* ── CATEGORY CARDS ─────────────────────── */
+    .cat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    .cat-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--r2);
+        padding: 28px 20px 24px;
+        text-align: center;
+        text-decoration: none !important;
+        display: block;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+        .cat-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.1);
+        }
+
+    .cat-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.2);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
-        margin: 0 auto 20px;
-        box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3);
+        font-size: 1.4rem;
+        color: var(--accent-blue);
+        margin: 0 auto 16px;
     }
 
-    .testimonial-card {
-        background: rgba(26, 26, 46, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        border: 1px solid rgba(0, 210, 255, 0.1);
-        transition: all 0.3s ease;
+    .cat-card h5 {
+        font-family: 'Syne', sans-serif;
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--white);
+        margin-bottom: 4px;
     }
 
-        .testimonial-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 210, 255, 0.3);
+    .cat-card p {
+        font-size: 0.78rem;
+        color: var(--lo);
+        margin-bottom: 14px;
+    }
+
+    .cat-pill {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--accent-blue);
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.18);
+        border-radius: 100px;
+        padding: 3px 12px;
+    }
+
+    /* ── HOW IT WORKS ───────────────────────── */
+    .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        position: relative;
+    }
+
+    .step-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--r2);
+        padding: 32px 26px;
+        position: relative;
+        transition: all 0.2s;
+    }
+
+        .step-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
         }
 
-    .divider {
-        width: 80px;
-        height: 4px;
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        border-radius: 2px;
-        margin: 20px auto;
+    .step-num {
+        font-family: 'Syne', sans-serif;
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: rgba(59, 130, 246, 0.08);
+        position: absolute;
+        top: 16px;
+        right: 20px;
+        line-height: 1;
+        pointer-events: none;
+        user-select: none;
     }
 
-    .newsletter-box {
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        border-radius: 20px;
+    .step-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        color: var(--accent-blue);
+        margin-bottom: 18px;
     }
 
-    .btn-explore {
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        color: white;
-        padding: 12px 35px;
-        border-radius: 50px;
-        transition: all 0.3s ease;
-        border: none;
+    .step-card h5 {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        color: var(--white);
+        font-size: 1rem;
+        margin-bottom: 8px;
     }
 
-        .btn-explore:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.4);
-            color: white;
+    .step-card p {
+        color: var(--mid);
+        font-size: 0.875rem;
+        line-height: 1.65;
+        margin: 0;
+    }
+
+    /* ── CTA ────────────────────────────────── */
+    .cta-wrap {
+        background: var(--bg);
+        padding: 80px 0;
+    }
+
+    .cta-box {
+        position: relative;
+        border-radius: 24px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        padding: 72px 48px;
+        text-align: center;
+    }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(239, 68, 68, 0.15) 0%, transparent 65%);
+            pointer-events: none;
         }
 
-    .rating-stars i {
-        color: #FFD700;
-        margin-right: 2px;
-    }
+        .cta-box h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.03em;
+            margin-bottom: 14px;
+            position: relative;
+        }
 
-    .animate-on-scroll {
+        .cta-box p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-bottom: 36px;
+            position: relative;
+        }
+
+        .cta-box .btn-fill-white {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: #2563eb !important;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 15px 40px;
+            border-radius: var(--r);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+            .cta-box .btn-fill-white:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            }
+
+    /* ── ANIMATIONS ─────────────────────────── */
+    .reveal {
         opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.6s ease;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
     }
 
-        .animate-on-scroll.animated {
+        .reveal.in {
             opacity: 1;
             transform: translateY(0);
         }
 
-    @@media (max-width: 768px) {
-        .hero-section {
-            min-height: 70vh;
+    /* ── RESPONSIVE ─────────────────────────── */
+    @@media (max-width: 991px) {
+        .cat-grid {
+            grid-template-columns: repeat(2, 1fr);
         }
 
-        .stat-box {
+        .steps-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .hero {
+            padding: 64px 0 48px;
+        }
+
+        .cat-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .hero-stats {
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .stat {
             border-right: none;
+            margin-right: 0;
+            padding-right: 0;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+            .stat:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+
+        .cta-box {
+            padding: 48px 24px;
         }
     }
 </style>
 
-<!-- Hero Section -->
-<section class="hero-section position-relative text-white">
-    <div class="container h-100">
-        <div class="row h-100 align-items-center" style="min-height: 85vh;">
+<!-- ════════ HERO ════════ -->
+<section class="hero">
+    <div class="hero-bg-blob blob1"></div>
+    <div class="hero-bg-blob blob2"></div>
+    <div class="container position-relative">
+        <div class="row align-items-center g-5">
             <div class="col-lg-7">
-                <h1 class="display-3 fw-bold mb-4 animate__animated animate__fadeInUp">
-                    Find Your Next<br />
-                    <span style="background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Amazing Experience</span>
+               
+                <h1>
+                    The easiest way<br>to find your next<br>
+                    <span class="hl">great experience</span>
                 </h1>
-                <p class="lead mb-4 animate__animated animate__fadeInUp animate__delay-1s">
-                    Discover exciting events, connect with people, and create unforgettable memories.
-                    From concerts to conferences, find what makes you happy.
+                <p class="hero-desc">
+                    Concerts, workshops, meetups, conferences — discover events
+                    that match your interests, in your city, this week.
                 </p>
-
-                <div class="d-flex gap-3 flex-wrap animate__animated animate__fadeInUp animate__delay-2s">
+                <div class="d-flex flex-wrap gap-3">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <a href="/Event" class="btn btn-custom-primary btn-lg px-5 py-3 fw-bold">
-                            <i class="bi bi-calendar-event"></i> Browse Events
+                        <a href="/Event" class="btn-fill">
+                            <i class="bi bi-calendar3"></i> Browse events
                         </a>
                         @if (User.IsInRole("Admin"))
                         {
-                            <a href="/Event/Create" class="btn btn-custom-outline btn-lg px-5 py-3">
-                                <i class="bi bi-plus-circle"></i> Create Event
+                            <a href="/Event/Create" class="btn-outline">
+                                <i class="bi bi-plus-circle"></i> Create event
                             </a>
                         }
                     }
                     else
                     {
-                        <a href="/Account/Register" class="btn btn-custom-primary btn-lg px-5 py-3 fw-bold">
-                            <i class="bi bi-person-plus"></i> Get Started Free
-                            <i class="bi bi-arrow-right"></i>
+                        <a href="/Account/Register" class="btn-fill">
+                            Get started — it's free <i class="bi bi-arrow-right"></i>
                         </a>
-                        <a href="/Account/Login" class="btn btn-custom-outline btn-lg px-5 py-3">
-                            <i class="bi bi-box-arrow-in-right"></i> Sign In
+                        <a href="/Account/Login" class="btn-outline">
+                            Sign in
                         </a>
                     }
                 </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-num">500+</div>
+                        <div class="stat-label">Events hosted</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">10K+</div>
+                        <div class="stat-label">Attendees</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">50+</div>
+                        <div class="stat-label">Cities</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-flex justify-content-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/10405/10405481.png"
+                     alt="Events"
+                     style="max-height: 380px; opacity: 0.92; filter: drop-shadow(0 0 40px rgba(59,130,246,0.25));"
+                     class="img-fluid">
+            </div>
+        </div>
+    </div>
+</section>
 
-                <div class="row mt-5 g-4 animate__animated animate__fadeInUp animate__delay-3s">
-                    <div class="col-4">
-                        <div class="stat-box">
-                            <h3 class="display-6 fw-bold mb-0">500+</h3>
-                            <p class="mb-0">Events Hosted</p>
+<!-- ════════ SEARCH ════════ -->
+<div class="search-wrap">
+    <div class="container">
+        <div class="search-box">
+            <p class="search-title"><i class="bi bi-search" style="color:var(--accent-blue); margin-right:8px;"></i>Find your perfect event</p>
+            <form action="/Event" method="get">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input type="text" name="searchTerm" class="form-control"
+                                   placeholder="Search events, categories, locations…">
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="stat-box">
-                            <h3 class="display-6 fw-bold mb-0">10K+</h3>
-                            <p class="mb-0">Happy Attendees</p>
-                        </div>
+                    <div class="col-md-3">
+                        <select name="category" class="form-select">
+                            <option value="">All Categories</option>
+                            <option>Conference</option>
+                            <option>Workshop</option>
+                            <option>Music</option>
+                            <option>Networking</option>
+                            <option>Sports</option>
+                        </select>
                     </div>
-                    <div class="col-4">
-                        <div class="stat-box">
-                            <h3 class="display-6 fw-bold mb-0">50+</h3>
-                            <p class="mb-0">Cities</p>
-                        </div>
+                    <div class="col-md-2">
+                        <input type="date" name="date" class="form-control">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn-fill w-100" style="height:46px; justify-content:center; border-radius:var(--r);">
+                            Search
+                        </button>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-5 d-none d-lg-block animate__animated animate__fadeInRight">
-                <div class="hero-image text-center">
-                    <img src="https://cdn-icons-png.flaticon.com/512/10405/10405481.png" alt="Events" class="img-fluid" style="filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3)); max-height: 400px;">
-                </div>
-            </div>
+            </form>
         </div>
     </div>
-    <div class="wave-bottom">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-            <path fill="#0f0c29" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-        </svg>
-    </div>
-</section>
+</div>
 
-<!-- Search Section -->
-<section class="container position-relative" style="margin-top: -50px; z-index: 2;">
-    <div class="search-card p-4">
-        <h3 class="text-center mb-4" style="background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-            <i class="bi bi-search"></i> Find Your Perfect Event
-        </h3>
-        <form action="/Event" method="get" class="row g-3">
-            <div class="col-md-5">
-                <div class="input-group">
-                    <span class="input-group-text bg-transparent border-end-0" style="border-color: rgba(0,210,255,0.2); color: #00d2ff;">
-                        <i class="bi bi-search"></i>
-                    </span>
-                    <input type="text" name="searchTerm" class="form-control border-start-0"
-                           placeholder="Search events, categories, locations...">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <select name="category" class="form-select">
-                    <option value="">All Categories</option>
-                    <option>Conference</option>
-                    <option>Workshop</option>
-                    <option>Music</option>
-                    <option>Networking</option>
-                    <option>Sports</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <input type="date" name="date" class="form-control" placeholder="Date">
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-explore w-100">
-                    <i class="bi bi-search"></i> Search
-                </button>
-            </div>
-        </form>
-    </div>
-</section>
-
-<!-- Categories Section -->
-<section class="categories-section py-5">
+<!-- ════════ CATEGORIES ════════ -->
+<section class="section section-alt">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold text-white">Browse by Category</h2>
-            <p class="lead text-muted">Find events that match your interests</p>
-            <div class="divider"></div>
+        <div class="row mb-5">
+            <div class="col-lg-6">
+                <p class="eyebrow">Browse</p>
+                <h2 class="section-title">Find events by category</h2>
+                <p class="section-sub">From tech talks to music festivals — there's something for everyone.</p>
+            </div>
         </div>
+        <div class="cat-grid">
+            <a href="/Event?category=Conference" class="cat-card reveal">
+                <div class="cat-icon"><i class="bi bi-mic"></i></div>
+                <h5>Conferences</h5>
+                <p>Tech, business & more</p>
+                <span class="cat-pill">24 events</span>
+            </a>
+            <a href="/Event?category=Music" class="cat-card reveal">
+                <div class="cat-icon"><i class="bi bi-music-note-beamed"></i></div>
+                <h5>Music</h5>
+                <p>Concerts & festivals</p>
+                <span class="cat-pill">18 events</span>
+            </a>
+            <a href="/Event?category=Workshop" class="cat-card reveal">
+                <div class="cat-icon"><i class="bi bi-tools"></i></div>
+                <h5>Workshops</h5>
+                <p>Learn & grow</p>
+                <span class="cat-pill">32 events</span>
+            </a>
+            <a href="/Event?category=Networking" class="cat-card reveal">
+                <div class="cat-icon"><i class="bi bi-people"></i></div>
+                <h5>Networking</h5>
+                <p>Meet & connect</p>
+                <span class="cat-pill">15 events</span>
+            </a>
+        </div>
+    </div>
+</section>
 
-        <div class="row g-4">
-            <div class="col-md-6 col-lg-3">
-                <div class="category-card text-center p-4 animate-on-scroll">
-                    <div class="category-icon mb-3">
-                        <i class="bi bi-mic display-1" style="color: #00d2ff;"></i>
-                    </div>
-                    <h5 class="fw-bold text-white">Conferences</h5>
-                    <p class="text-muted small">Tech, Business & More</p>
-                    <span class="badge" style="background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);">24 Events</span>
-                </div>
+<!-- ════════ HOW IT WORKS ════════ -->
+<section class="section">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-6">
+                <p class="eyebrow">How it works</p>
+                <h2 class="section-title">Three steps to your next event</h2>
+                <p class="section-sub">Getting started takes less than a minute.</p>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="category-card text-center p-4 animate-on-scroll">
-                    <div class="category-icon mb-3">
-                        <i class="bi bi-music-note display-1" style="color: #00d2ff;"></i>
-                    </div>
-                    <h5 class="fw-bold text-white">Music</h5>
-                    <p class="text-muted small">Concerts & Festivals</p>
-                    <span class="badge" style="background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);">18 Events</span>
-                </div>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card reveal">
+                <div class="step-num">01</div>
+                <div class="step-icon"><i class="bi bi-person-plus"></i></div>
+                <h5>Create an account</h5>
+                <p>Sign up free and join a community of event-goers across 50+ cities.</p>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="category-card text-center p-4 animate-on-scroll">
-                    <div class="category-icon mb-3">
-                        <i class="bi bi-briefcase display-1" style="color: #00d2ff;"></i>
-                    </div>
-                    <h5 class="fw-bold text-white">Workshops</h5>
-                    <p class="text-muted small">Learn & Grow</p>
-                    <span class="badge" style="background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);">32 Events</span>
-                </div>
+            <div class="step-card reveal">
+                <div class="step-num">02</div>
+                <div class="step-icon"><i class="bi bi-search"></i></div>
+                <h5>Discover events</h5>
+                <p>Browse and filter by category, date, and location until you find the right fit.</p>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="category-card text-center p-4 animate-on-scroll">
-                    <div class="category-icon mb-3">
-                        <i class="bi bi-people display-1" style="color: #00d2ff;"></i>
-                    </div>
-                    <h5 class="fw-bold text-white">Networking</h5>
-                    <p class="text-muted small">Meet & Connect</p>
-                    <span class="badge" style="background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);">15 Events</span>
-                </div>
+            <div class="step-card reveal">
+                <div class="step-num">03</div>
+                <div class="step-icon"><i class="bi bi-ticket-perforated"></i></div>
+                <h5>Register & attend</h5>
+                <p>Secure your spot in seconds and show up ready for a great experience.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- How It Works -->
-<section class="how-it-works py-5">
+<!-- ════════ CTA ════════ -->
+<div class="cta-wrap">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold text-white">How EventHub Works</h2>
-            <p class="lead text-muted">Simple steps to start your event journey</p>
-            <div class="divider"></div>
-        </div>
-
-        <div class="row g-4">
-            <div class="col-md-4 text-center animate-on-scroll">
-                <div class="step-number">1</div>
-                <i class="bi bi-person-plus display-3" style="color: #00d2ff;"></i>
-                <h5 class="fw-bold text-white mt-3">Create Account</h5>
-                <p class="text-muted">Sign up for free and join our community</p>
-            </div>
-            <div class="col-md-4 text-center animate-on-scroll">
-                <div class="step-number">2</div>
-                <i class="bi bi-search display-3" style="color: #00d2ff;"></i>
-                <h5 class="fw-bold text-white mt-3">Discover Events</h5>
-                <p class="text-muted">Browse events matching your interests</p>
-            </div>
-            <div class="col-md-4 text-center animate-on-scroll">
-                <div class="step-number">3</div>
-                <i class="bi bi-ticket-perforated display-3" style="color: #00d2ff;"></i>
-                <h5 class="fw-bold text-white mt-3">Register & Attend</h5>
-                <p class="text-muted">Book your spot and enjoy the experience</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- CTA Section -->
-<section class="newsletter-section py-5">
-    <div class="container">
-        <div class="newsletter-box p-5 text-center text-white">
-            <h3 class="display-6 fw-bold mb-3">Ready to Start Your Journey?</h3>
-            <p class="lead mb-4">Join EventHub today and discover amazing events near you</p>
+        <div class="cta-box">
+            <h2>Ready to find your next event?</h2>
+            <p>Join thousands of people discovering what's happening around them.</p>
             @if (!User.Identity.IsAuthenticated)
             {
-                <a href="/Account/Register" class="btn btn-light btn-lg px-5" style="color: #1a1a2e; font-weight: bold;">
-                    Get Started Now
-                    <i class="bi bi-arrow-right"></i>
+                <a href="/Account/Register" class="btn-fill-white">
+                    Get started free <i class="bi bi-arrow-right"></i>
                 </a>
             }
             else
             {
-                <a href="/Event" class="btn btn-light btn-lg px-5" style="color: #1a1a2e; font-weight: bold;">
-                    Browse Events
-                    <i class="bi bi-arrow-right"></i>
+                <a href="/Event" class="btn-fill-white">
+                    Browse all events <i class="bi bi-arrow-right"></i>
                 </a>
             }
         </div>
     </div>
-</section>
+</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.js"></script>
-<script>
-    // Scroll animation
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animated');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.animate-on-scroll').forEach(el => {
-        observer.observe(el);
-    });
-</script>
+@section Scripts {
+    <script>
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((e, i) => {
+                if (e.isIntersecting) {
+                    setTimeout(() => e.target.classList.add('in'), i * 70);
+                    io.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    </script>
+}

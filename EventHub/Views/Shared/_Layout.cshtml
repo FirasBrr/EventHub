@@ -5,181 +5,446 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - EventHub</title>
 
-    <!-- Bootstrap 5 CSS and Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            font-family: 'Inter', sans-serif;
+        :root {
+            --bg: #f0f4f8;
+            --surface: #ffffff;
+            --card: #ffffff;
+            --border: rgba(0, 0, 0, 0.06);
+            --border-hi: rgba(59, 130, 246, 0.2);
+            --accent-blue: #3b82f6;
+            --accent-red: #ef4444;
+            --accent-blue-dim: #eff6ff;
+            --accent-red-dim: #fef2f2;
+            --amber: #f59e0b;
+            --text-hi: #1e293b;
+            --text-md: #64748b;
+            --text-lo: #94a3b8;
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 24px;
         }
 
-        body {
-            background: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #16213e 100%);
-            padding-top: 76px;
-            color: #e0e0e0;
-        }
-
-        /* Modern Navbar - Dark Theme */
-        .navbar {
-            background: linear-gradient(135deg, #1a1a2e 0%, #0f0c29 100%);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(0, 210, 255, 0.1);
-        }
-
-        .navbar-brand {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none;
-        }
-
-            .navbar-brand i {
-                background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                margin-right: 8px;
-            }
-
-        .nav-link {
-            color: rgba(255,255,255,0.85) !important;
-            font-weight: 500;
-            margin: 0 5px;
-            padding: 8px 16px !important;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-            .nav-link:hover {
-                color: white !important;
-                background: rgba(0, 210, 255, 0.1);
-            }
-
-        /* Auth Buttons */
-        .btn-login {
-            background: transparent;
-            border: 2px solid #00d2ff;
-            color: #00d2ff !important;
-            padding: 8px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-            .btn-login:hover {
-                background: rgba(0, 210, 255, 0.1);
-                transform: translateY(-2px);
-            }
-
-        .btn-register {
-            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-            color: white !important;
-            padding: 8px 24px;
-            border-radius: 50px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-            .btn-register:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
-            }
-
-        /* User Menu */
-        .user-menu {
-            background: transparent;
-            border: 1px solid rgba(0, 210, 255, 0.3);
-            border-radius: 40px;
-            padding: 5px 15px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-            .user-menu:hover {
-                background: rgba(0, 210, 255, 0.1);
-                border-color: #00d2ff;
-            }
-
-        .dropdown-menu-dark {
-            background: #1a1a2e;
-            border: 1px solid rgba(0, 210, 255, 0.3);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .dropdown-item {
-            color: #e0e0e0;
-            transition: all 0.3s ease;
-        }
-
-            .dropdown-item:hover {
-                background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-                color: white;
-            }
-
-        /* Footer */
-        .modern-footer {
-            background: linear-gradient(135deg, #0a0a1a 0%, #0f0c29 100%);
-            color: #a0a0b0;
-            padding: 60px 0 30px;
-            margin-top: 60px;
-            border-top: 1px solid rgba(0, 210, 255, 0.1);
-        }
-
-        .social-links a {
-            color: #a0a0b0;
-            font-size: 1.5rem;
-            margin-right: 20px;
-            transition: all 0.3s ease;
-        }
-
-            .social-links a:hover {
-                color: #00d2ff;
-                transform: translateY(-3px);
-            }
-
-        .footer-links {
-            list-style: none;
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
             padding: 0;
         }
 
-            .footer-links li {
-                margin-bottom: 12px;
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text-hi);
+            padding-top: 72px;
+            min-height: 100vh;
+        }
+
+        /* ─── NAVBAR ─────────────────────────────────────── */
+        .navbar {
+            background: white;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+            height: 72px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+            .navbar .container {
+                height: 100%;
+                display: flex;
+                align-items: center;
             }
 
+        .navbar-brand {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-hi) !important;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-red);
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .navbar-toggler {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 6px 10px;
+            color: var(--text-md);
+        }
+
+        .nav-link {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-md) !important;
+            padding: 6px 14px !important;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .nav-link:hover,
+            .nav-link.active {
+                color: var(--accent-blue) !important;
+                background: var(--accent-blue-dim);
+            }
+
+        /* ─── BUTTONS ────────────────────────────────────── */
+        .btn-login {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-md);
+            border: 1px solid var(--border);
+            background: transparent;
+            padding: 8px 20px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .btn-login:hover {
+                color: var(--accent-blue);
+                border-color: var(--accent-blue);
+                background: var(--accent-blue-dim);
+            }
+
+        .btn-register {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: white;
+            background: var(--accent-red);
+            padding: 8px 22px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+        }
+
+            .btn-register:hover {
+                color: white;
+                opacity: 0.88;
+                transform: translateY(-1px);
+            }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-blue);
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 12px 28px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            border: none;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+        }
+
+            .btn-primary:hover {
+                color: white;
+                opacity: 0.88;
+                transform: translateY(-2px);
+            }
+
+        .btn-outline-primary {
+            background: transparent;
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 10px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+            .btn-outline-primary:hover {
+                background: var(--accent-blue-dim);
+                color: var(--accent-blue);
+            }
+
+        /* ─── USER DROPDOWN ──────────────────────────────── */
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 6px 14px 6px 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-hi);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+            .user-chip:hover {
+                border-color: var(--accent-blue);
+                background: var(--accent-blue-dim);
+            }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--accent-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .dropdown-menu {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 6px;
+            min-width: 200px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+            margin-top: 6px !important;
+        }
+
+        .dropdown-item {
+            color: var(--text-md);
+            border-radius: var(--radius-sm);
+            padding: 9px 14px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+            .dropdown-item:hover {
+                background: var(--accent-blue-dim);
+                color: var(--accent-blue);
+            }
+
+            .dropdown-item.danger {
+                color: var(--accent-red);
+            }
+
+                .dropdown-item.danger:hover {
+                    background: var(--accent-red-dim);
+                    color: var(--accent-red);
+                }
+
+        /* ─── ALERTS ─────────────────────────────────────── */
+        .alert {
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            color: #16a34a;
+            border-left: 4px solid #22c55e;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            color: #dc2626;
+            border-left: 4px solid #ef4444;
+        }
+
+        /* ─── FOOTER ─────────────────────────────────────── */
+        .site-footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 64px 0 32px;
+            margin-top: 80px;
+        }
+
+        .footer-brand {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--text-hi);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .footer-tagline {
+            color: var(--text-lo);
+            font-size: 0.875rem;
+            line-height: 1.6;
+            max-width: 220px;
+            margin-bottom: 24px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-lo);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+            .social-btn:hover {
+                color: var(--accent-blue);
+                border-color: var(--accent-blue);
+                background: var(--accent-blue-dim);
+            }
+
+        .footer-heading {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-lo);
+            margin-bottom: 18px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
             .footer-links a {
-                color: #a0a0b0;
+                color: var(--text-md);
                 text-decoration: none;
-                transition: all 0.3s ease;
+                font-size: 0.875rem;
+                transition: color 0.2s;
             }
 
                 .footer-links a:hover {
-                    color: #00d2ff;
-                    padding-left: 5px;
+                    color: var(--accent-blue);
                 }
 
-        .copyright {
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding-top: 30px;
-            margin-top: 30px;
-            text-align: center;
+        .footer-newsletter-label {
+            font-size: 0.75rem;
+            color: var(--text-lo);
+            margin-bottom: 10px;
         }
 
-        /* Scroll to Top */
+        .newsletter-form {
+            display: flex;
+            gap: 8px;
+        }
+
+            .newsletter-form input {
+                flex: 1;
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-sm);
+                color: var(--text-hi);
+                padding: 9px 14px;
+                font-size: 0.875rem;
+                outline: none;
+            }
+
+                .newsletter-form input:focus {
+                    border-color: var(--accent-blue);
+                }
+
+            .newsletter-form button {
+                background: var(--accent-blue);
+                color: white;
+                border: none;
+                border-radius: var(--radius-sm);
+                padding: 9px 18px;
+                font-size: 0.875rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: opacity 0.2s;
+            }
+
+                .newsletter-form button:hover {
+                    opacity: 0.85;
+                }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 28px;
+            margin-top: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+            .footer-bottom p {
+                color: var(--text-lo);
+                font-size: 0.8rem;
+            }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+        }
+
+            .footer-bottom-links a {
+                color: var(--text-lo);
+                font-size: 0.8rem;
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+
+                .footer-bottom-links a:hover {
+                    color: var(--accent-blue);
+                }
+
+        /* ─── SCROLL TO TOP ──────────────────────────────── */
         .scroll-top {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-            border-radius: 50%;
+            bottom: 28px;
+            right: 28px;
+            width: 44px;
+            height: 44px;
+            background: var(--accent-blue);
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -187,8 +452,9 @@
             cursor: pointer;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 1000;
+            transition: all 0.3s;
+            z-index: 999;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
             .scroll-top.show {
@@ -197,100 +463,143 @@
             }
 
             .scroll-top:hover {
-                transform: translateY(-5px);
+                transform: translateY(-3px);
             }
 
-        @@media (max-width: 768px) {
+        /* ─── BADGES & HELPERS ─────────────────────────────── */
+        .badge-blue {
+            background: var(--accent-blue-dim);
+            color: var(--accent-blue);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .badge-red {
+            background: var(--accent-red-dim);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        /* ─── RESPONSIVE ─────────────────────────────────── */
+        @@media (max-width: 991px) {
+            .navbar-collapse {
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-md);
+                padding: 16px;
+                margin-top: 10px;
+            }
+        }
+
+        @@media (max-width: 576px) {
             body {
-                padding-top: 60px;
+                padding-top: 64px;
             }
 
-            .navbar-brand {
-                font-size: 1.4rem;
+            .navbar {
+                height: 64px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
+
+    <!-- ══════════════════ NAVBAR ══════════════════════ -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                <i class="bi bi-calendar-event-fill"></i> EventHub
+                <span class="brand-dot"></span>
+                EventHub
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" style="border: 1px solid #00d2ff;">
-                <span class="navbar-toggler-icon" style="background-image: none; color: #00d2ff;">
-                    <i class="bi bi-list"></i>
-                </span>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="bi bi-list" style="color:var(--text-md); font-size:1.25rem;"></i>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarContent">
-                <!-- Navigation Links -->
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Home" asp-action="Index">
-                            <i class="bi bi-house-fill"></i> Home
+                            <i class="bi bi-house"></i> Home
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Event" asp-action="Index">
-                            <i class="bi bi-calendar-event-fill"></i> Events
+                            <i class="bi bi-calendar3"></i> Events
                         </a>
                     </li>
+
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        @* Only show My Events for regular users, not Admin *@
                         @if (!User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Event" asp-action="MyEvents">
-                                    <i class="bi bi-star-fill"></i> My Events
+                                    <i class="bi bi-bookmark"></i> My Events
                                 </a>
                             </li>
                         }
-
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Event" asp-action="Create">
-                                    <i class="bi bi-plus-circle-fill"></i> Create Event
+                                    <i class="bi bi-plus-circle"></i> Create Event
                                 </a>
                             </li>
-                        }
-                        @if (User.IsInRole("Admin"))
-                        {
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">
-                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                    <i class="bi bi-grid-1x2"></i> Dashboard
                                 </a>
                             </li>
                         }
                     }
                 </ul>
 
-                <!-- Right side buttons -->
-                <div class="d-flex">
+                <div class="d-flex align-items-center gap-2">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <!-- User Dropdown -->
                         <div class="dropdown">
-                            <button class="user-menu dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle me-2"></i>
+                            <button class="user-chip dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                    style="border: none; outline: none;">
+                                <div class="user-avatar">
+                                    @(User.Identity.Name?.Length > 0 ? User.Identity.Name[0].ToString().ToUpper() : "U")
+                                </div>
                                 <span>@User.Identity.Name</span>
+                                <i class="bi bi-chevron-down" style="font-size:0.7rem; color:var(--text-lo);"></i>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <span style="padding: 6px 14px; display:block; font-size:0.75rem; color:var(--text-lo);">
+                                        Signed in as <strong style="color:var(--text-hi);">@User.Identity.Name</strong>
+                                    </span>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
                                         <i class="bi bi-person"></i> My Profile
                                     </a>
                                 </li>
-                              
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form asp-controller="Account" asp-action="Logout" method="post">
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="bi bi-box-arrow-right"></i> Logout
+                                        <button type="submit" class="dropdown-item danger w-100 text-start">
+                                            <i class="bi bi-box-arrow-right"></i> Sign out
                                         </button>
                                     </form>
                                 </li>
@@ -299,60 +608,72 @@
                     }
                     else
                     {
-                        <div>
-                            <a class="btn-login me-2" asp-controller="Account" asp-action="Login">
-                                <i class="bi bi-box-arrow-in-right"></i> Login
-                            </a>
-                            <a class="btn-register" asp-controller="Account" asp-action="Register">
-                                <i class="bi bi-person-plus"></i> Sign Up
-                            </a>
-                        </div>
+                        <a class="btn-login" asp-controller="Account" asp-action="Login">
+                            Sign in
+                        </a>
+                        <a class="btn-register" asp-controller="Account" asp-action="Register">
+                            Get started
+                        </a>
                     }
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
+    <!-- ══════════════════ ALERTS ═════════════════════════ -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mx-3 mt-3" role="alert">
+            <i class="bi bi-check-circle-fill"></i>
+            @TempData["Success"]
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mx-3 mt-3" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            @TempData["Error"]
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show mx-3 mt-3" role="alert" style="background:#eff6ff; color:#2563eb; border-left-color:#3b82f6;">
+            <i class="bi bi-info-circle-fill"></i>
+            @TempData["Info"]
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- ══════════════════ MAIN ════════════════════════════ -->
     <main>
-        @if (TempData["Success"] != null)
-        {
-            <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
-                <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
-            </div>
-        }
-
-        @if (TempData["Error"] != null)
-        {
-            <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
-                <i class="bi bi-exclamation-triangle-fill"></i> @TempData["Error"]
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
-            </div>
-        }
-
         @RenderBody()
     </main>
 
-    <!-- Footer -->
-    <footer class="modern-footer">
+    <!-- ══════════════════ FOOTER ═════════════════════════ -->
+    <footer class="site-footer">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <h5 style="color: #00d2ff;" class="mb-3">
-                        <i class="bi bi-calendar-event-fill"></i> EventHub
-                    </h5>
-                    <p>Discover, create, and join amazing events in your area.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="bi bi-facebook"></i></a>
-                        <a href="#"><i class="bi bi-twitter"></i></a>
-                        <a href="#"><i class="bi bi-instagram"></i></a>
-                        <a href="#"><i class="bi bi-linkedin"></i></a>
+            <div class="row g-5">
+
+                <div class="col-lg-4">
+                    <div class="footer-brand">
+                        <span class="brand-dot"></span>
+                        EventHub
+                    </div>
+                    <p class="footer-tagline">Discover, create, and join events that matter to you.</p>
+                    <div class="footer-socials">
+                        <a href="#" class="social-btn" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-btn" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="social-btn" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-btn" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5 class="text-white mb-3">Quick Links</h5>
+                <div class="col-6 col-lg-2">
+                    <p class="footer-heading">Navigate</p>
                     <ul class="footer-links">
                         <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                         <li><a asp-controller="Event" asp-action="Index">Events</a></li>
@@ -361,8 +682,8 @@
                     </ul>
                 </div>
 
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5 class="text-white mb-3">Support</h5>
+                <div class="col-6 col-lg-2">
+                    <p class="footer-heading">Legal</p>
                     <ul class="footer-links">
                         <li><a href="#">FAQ</a></li>
                         <li><a href="#">Privacy</a></li>
@@ -370,46 +691,48 @@
                     </ul>
                 </div>
 
-                <div class="col-lg-4 mb-4">
-                    <h5 class="text-white mb-3">Newsletter</h5>
-                    <div class="input-group">
-                        <input type="email" class="form-control" placeholder="Your email" style="background: rgba(26,26,46,0.9); border-color: #00d2ff; color: white;">
-                        <button class="btn" style="background: #00d2ff; color: white;">Subscribe</button>
+                <div class="col-lg-4">
+                    <p class="footer-heading">Stay in the loop</p>
+                    <p class="footer-newsletter-label">Get notified about upcoming events in your area.</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="your@email.com" />
+                        <button type="button">Subscribe</button>
                     </div>
                 </div>
+
             </div>
-            <div class="copyright">
-                <p>&copy; @DateTime.Now.Year EventHub - All Rights Reserved</p>
+
+            <div class="footer-bottom">
+                <p>&copy; @DateTime.Now.Year EventHub. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Cookies</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <div class="scroll-top" onclick="scrollToTop()">
+    <!-- Scroll to top -->
+    <div class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
         <i class="bi bi-arrow-up"></i>
     </div>
 
-    <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
-        // Scroll to Top
-        window.addEventListener('scroll', function() {
-            document.querySelector('.scroll-top').classList.toggle('show', window.pageYOffset > 300);
+        window.addEventListener('scroll', function () {
+            document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300);
         });
 
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Auto hide alerts
-        setTimeout(function() {
-            document.querySelectorAll('.alert').forEach(function(alert) {
-                setTimeout(function() {
-                    alert.style.opacity = '0';
-                    setTimeout(function() { alert.remove(); }, 300);
-                }, 5000);
+        setTimeout(function () {
+            document.querySelectorAll('.alert').forEach(function (el) {
+                setTimeout(function () {
+                    el.style.transition = 'opacity 0.4s';
+                    el.style.opacity = '0';
+                    setTimeout(function () { el.remove(); }, 400);
+                }, 4500);
             });
-        }, 1000);
+        }, 500);
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)

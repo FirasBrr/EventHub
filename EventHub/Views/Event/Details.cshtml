@@ -7,246 +7,181 @@
 }
 
 <style>
-    .event-details-container {
-        max-width: 1200px;
+    .details-container {
+        max-width: 1100px;
         margin: 0 auto;
-        padding: 2rem;
+        padding: 32px 20px;
     }
 
-    .event-header {
-        background: rgba(26, 26, 46, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        border: 1px solid rgba(0, 210, 255, 0.2);
+    .hero-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
         overflow: hidden;
-        margin-bottom: 2rem;
+        margin-bottom: 28px;
     }
 
-    .event-header-image {
-        height: 300px;
-        background: linear-gradient(135deg, #00d2ff33, #3a7bd533);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .hero-banner {
+        height: 200px;
+        background: linear-gradient(135deg, var(--accent-blue) 0%, #2563eb 100%);
         position: relative;
     }
 
-    .event-status {
+    .status-badge {
         position: absolute;
         top: 20px;
         right: 20px;
-        padding: 8px 20px;
-        border-radius: 30px;
-        font-weight: bold;
-        z-index: 1;
+        padding: 6px 16px;
+        border-radius: 40px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: white;
     }
 
-    .event-title-section {
-        padding: 2rem;
+    .hero-content {
+        padding: 24px 28px;
     }
 
-    .event-category-badge {
-        display: inline-block;
-        padding: 5px 15px;
-        background: rgba(0, 210, 255, 0.2);
-        border-radius: 20px;
-        color: #00d2ff;
-        font-size: 0.85rem;
+    .category-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--accent-blue);
+        padding: 4px 12px;
+        border-radius: 40px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-bottom: 14px;
     }
 
     .info-card {
-        background: rgba(26, 26, 46, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        border: 1px solid rgba(0, 210, 255, 0.2);
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 20px;
+        margin-bottom: 20px;
     }
 
-    .info-icon {
-        width: 50px;
-        height: 50px;
-        background: rgba(0, 210, 255, 0.1);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #00d2ff;
-        font-size: 1.5rem;
-    }
-
-    .info-title {
-        color: #a0a0b0;
-        font-size: 0.85rem;
-        margin-bottom: 0.25rem;
-    }
-
-    .info-value {
-        color: white;
-        font-size: 1.1rem;
-        font-weight: 600;
-    }
+        .info-card h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
 
     #fullMap {
-        height: 400px;
-        border-radius: 15px;
-        border: 1px solid rgba(0, 210, 255, 0.3);
+        height: 280px;
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        margin-top: 12px;
     }
 
     .registration-card {
-        background: linear-gradient(135deg, rgba(0, 210, 255, 0.1), rgba(58, 123, 213, 0.1));
-        border-radius: 15px;
-        padding: 1.5rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 24px;
+        position: sticky;
+        top: 100px;
+    }
+
+    .price-large {
+        font-family: 'Syne', sans-serif;
+        font-size: 2rem;
+        font-weight: 800;
         text-align: center;
-        border: 1px solid rgba(0, 210, 255, 0.3);
+        margin-bottom: 20px;
     }
 
-    .price-display {
-        font-size: 2.5rem;
-        font-weight: bold;
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .btn-register {
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        color: white;
-        padding: 12px 40px;
-        border-radius: 50px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        border: none;
-        width: 100%;
-    }
-
-        .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 210, 255, 0.4);
+        .price-large.free {
+            color: #10b981;
         }
 
-    .btn-registered {
-        background: #28a745;
-        width: 100%;
-        padding: 12px 40px;
-        border-radius: 50px;
-        color: white;
-        font-weight: 600;
-        border: none;
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
     }
 
-    .btn-cancel-registration {
-        background: #dc3545;
+    .capacity-bar {
+        background: var(--bg);
+        border-radius: 10px;
+        height: 6px;
+        margin: 8px 0;
+        overflow: hidden;
+    }
+
+    .capacity-fill {
+        background: var(--accent-blue);
+        height: 100%;
+        border-radius: 10px;
+    }
+
+    .btn-primary-full {
+        background: var(--accent-blue);
         color: white;
-        padding: 12px 40px;
-        border-radius: 50px;
-        font-weight: 600;
-        transition: all 0.3s ease;
         border: none;
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.2s;
+    }
+
+        .btn-primary-full:hover {
+            background: #2563eb;
+        }
+
+    .btn-danger-full {
+        background: var(--accent-red);
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
         width: 100%;
         margin-top: 10px;
     }
 
-        .btn-cancel-registration:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
-        }
-
-    .btn-edit {
-        background: #ffc107;
-        color: #1a1a2e;
-        padding: 8px 20px;
-        border-radius: 25px;
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-block;
-        margin-right: 10px;
-    }
-
-    .btn-delete {
-        background: #dc3545;
-        color: white;
-        padding: 8px 20px;
-        border-radius: 25px;
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-block;
-    }
-
-    .capacity-bar {
-        background: rgba(255,255,255,0.1);
-        border-radius: 10px;
-        height: 8px;
-        overflow: hidden;
-        margin: 10px 0;
-    }
-
-    .capacity-fill {
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        height: 100%;
-        border-radius: 10px;
-        transition: width 0.3s ease;
-    }
-
-    .attendee-list {
-        max-height: 300px;
-        overflow-y: auto;
-    }
-
-    .attendee-item {
-        padding: 10px;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+    .admin-actions {
         display: flex;
-        align-items: center;
         gap: 10px;
+        justify-content: flex-end;
     }
 
-        .attendee-item i {
-            color: #00d2ff;
-            font-size: 1.2rem;
+        .admin-actions a {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-decoration: none;
         }
-
-    @@media (max-width: 768px) {
-        .event-details-container {
-            padding: 1rem;
-        }
-
-        .event-header-image {
-            height: 200px;
-        }
-
-        .price-display {
-            font-size: 1.8rem;
-        }
-    }
 </style>
 
-<div class="event-details-container">
-    <!-- Event Header -->
-    <div class="event-header">
-        <div class="event-header-image">
-            <div class="event-status" style="background: @(Model.IsFree ? "#28a745" : "#00d2ff")">
-                @(Model.IsFree ? "FREE EVENT" : "PAID EVENT")
+<div class="details-container">
+    <div class="hero-card">
+        <div class="hero-banner">
+            <div class="status-badge" style="background: @(Model.IsFree ? "#10b981" : "var(--accent-blue)")">
+                @(Model.IsFree ? "Free event" : "Paid event")
             </div>
-            <i class="bi bi-calendar-event" style="font-size: 5rem; color: rgba(255,255,255,0.3);"></i>
         </div>
-
-        <div class="event-title-section">
+        <div class="hero-content">
             <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
                 <div>
-                    <span class="event-category-badge mb-2 d-inline-block">
-                        <i class="bi bi-tag"></i> @Model.Category
-                    </span>
-                    <h1 class="text-white mb-2">@Model.Name</h1>
-                    <p class="text-muted">Created on @Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
+                    <span class="category-tag"><i class="bi bi-tag"></i> @Model.Category</span>
+                    <h1 style="font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; margin: 8px 0 4px;">@Model.Name</h1>
+                    <p class="text-muted small">Created @Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
                 </div>
                 @if (User.IsInRole("Admin"))
                 {
-                    <div>
-                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">
-                            <i class="bi bi-pencil"></i> Edit Event
+                    <div class="admin-actions">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" style="background: #fef3c7; color: #d97706;">
+                            <i class="bi bi-pencil"></i> Edit
                         </a>
-                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn-delete">
+                        <a asp-action="Delete" asp-route-id="@Model.Id" style="background: #fee2e2; color: #dc2626;">
                             <i class="bi bi-trash"></i> Delete
                         </a>
                     </div>
@@ -256,172 +191,106 @@
     </div>
 
     <div class="row g-4">
-        <!-- Left Column - Event Info -->
-        <div class="col-lg-8">
-            <!-- Description -->
+        <div class="col-lg-7">
             <div class="info-card">
-                <h4 class="text-white mb-3">
-                    <i class="bi bi-file-text"></i> About This Event
-                </h4>
-                <p class="text-muted" style="line-height: 1.6;">@Model.Description</p>
+                <h4><i class="bi bi-file-text" style="color: var(--accent-blue);"></i> About this event</h4>
+                <p style="color: var(--text-md); line-height: 1.7;">@Model.Description</p>
             </div>
 
-            <!-- Location & Map -->
             <div class="info-card">
-                <h4 class="text-white mb-3">
-                    <i class="bi bi-geo-alt"></i> Location
-                </h4>
-                <p class="text-muted mb-3">
-                    <i class="bi bi-building"></i> <strong>Venue:</strong> @Model.Location
-                </p>
+                <h4><i class="bi bi-geo-alt" style="color: var(--accent-blue);"></i> Location</h4>
+                <p><strong>Venue:</strong> @Model.Location</p>
                 @if (!string.IsNullOrEmpty(Model.FullAddress))
                 {
-                    <p class="text-muted mb-3">
-                        <i class="bi bi-pin-map"></i> <strong>Full Address:</strong> @Model.FullAddress
-                    </p>
+                    <p class="text-muted small"><i class="bi bi-pin-map"></i> @Model.FullAddress</p>
                 }
                 <div id="fullMap"></div>
             </div>
 
-            <!-- Attendees Section -->
             @if (Model.Registrations != null && Model.Registrations.Any())
             {
                 <div class="info-card">
-                    <h4 class="text-white mb-3">
-                        <i class="bi bi-people"></i> Attendees (@Model.Registrations.Count)
-                    </h4>
-                    <div class="attendee-list">
-                        @foreach (var reg in Model.Registrations.Take(10))
-                        {
-                            <div class="attendee-item">
-                                <i class="bi bi-person-circle"></i>
-                                <span class="text-white">Attendee</span>
-                                <small class="text-muted ms-auto">Registered on @reg.RegisteredAt.ToString("MMM dd, yyyy")</small>
-                            </div>
-                        }
-                        @if (Model.Registrations.Count > 10)
-                        {
-                            <div class="text-center mt-2">
-                                <small class="text-muted">And @(Model.Registrations.Count - 10) more attendees...</small>
-                            </div>
-                        }
-                    </div>
+                    <h4><i class="bi bi-people" style="color: var(--accent-blue);"></i> Attendees (@Model.Registrations.Count)</h4>
+                    @foreach (var reg in Model.Registrations.Take(8))
+                    {
+                        <div class="d-flex align-items-center gap-2 py-2 border-bottom">
+                            <i class="bi bi-person-circle" style="color: var(--accent-blue);"></i>
+                            <span class="small">Attendee</span>
+                            <span class="small text-muted ms-auto">@reg.RegisteredAt.ToString("MMM dd")</span>
+                        </div>
+                    }
                 </div>
             }
         </div>
 
-        <!-- Right Column - Registration Card -->
-        <div class="col-lg-4">
+        <div class="col-lg-5">
             <div class="registration-card">
-                <div class="mb-3">
-                    <span class="price-display">
-                        @(Model.IsFree ? "FREE" : Model.Price.ToString("C"))
-                    </span>
+                <div class="price-large @(Model.IsFree ? "free" : "")">
+                    @(Model.IsFree ? "FREE" : Model.Price.ToString("C"))
                 </div>
 
-                <!-- Date & Time -->
-                <div class="text-start mb-3">
-                    <div class="info-title">
-                        <i class="bi bi-calendar"></i> Date & Time
-                    </div>
-                    <div class="info-value">
-                        @Model.DateTime.ToString("dddd, MMMM dd, yyyy")
-                        <br />
-                        <small class="text-muted">@Model.DateTime.ToString("h:mm tt")</small>
-                    </div>
+                <div class="detail-row">
+                    <span><i class="bi bi-calendar"></i> Date</span>
+                    <span class="fw-semibold">@Model.DateTime.ToString("MMM dd, yyyy • h:mm tt")</span>
                 </div>
 
-                <!-- Capacity -->
-                <div class="text-start mb-3">
-                    <div class="info-title">
-                        <i class="bi bi-people"></i> Capacity
-                    </div>
-                    <div class="info-value">
-                        @(Model.Registrations?.Count ?? 0) / @Model.Capacity spots filled
-                    </div>
-                    <div class="capacity-bar">
-                        <div class="capacity-fill" style="width: @((Model.Registrations != null && Model.Capacity > 0 ? (double)Model.Registrations.Count / Model.Capacity * 100 : 0))%"></div>
-                    </div>
+                <div class="detail-row">
+                    <span><i class="bi bi-people"></i> Capacity</span>
+                    <span>@(Model.Registrations?.Count ?? 0) / @Model.Capacity</span>
+                </div>
+                <div class="capacity-bar">
+                    <div class="capacity-fill" style="width: @(Model.Registrations != null && Model.Capacity > 0 ? (double)Model.Registrations.Count / Model.Capacity * 100 : 0)%"></div>
                 </div>
 
-                <!-- Registration & Cancel Buttons -->
                 @if (User.IsInRole("Admin"))
                 {
-                    <!-- Admin message - cannot register -->
-                    <div class="alert alert-info text-center" style="background: rgba(0, 210, 255, 0.1); border: 1px solid #00d2ff;">
-                        <i class="bi bi-shield-lock-fill"></i>
-                        <p class="mb-0 mt-2">As an administrator, you manage events rather than register as an attendee.</p>
-                        <small class="text-muted">Use the Create Event button to add new events.</small>
+                    <div class="text-center mt-3">
+                        <span class="badge" style="background: #fef3c7; color: #d97706; padding: 6px 12px;">
+                            <i class="bi bi-shield-check"></i> Admin view
+                        </span>
+                        <p class="small text-muted mt-2">Administrators manage events, not register for them.</p>
                     </div>
                 }
                 else if (User.Identity?.IsAuthenticated == true)
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    var isRegistered = Model.Registrations != null && Model.Registrations.Any(r => r.UserId == userId);
+                    var isRegistered = Model.Registrations?.Any(r => r.UserId == userId) ?? false;
 
                     if (isRegistered)
                     {
-                        <button class="btn-registered" disabled>
-                            <i class="bi bi-check-circle"></i> You're Registered!
+                        <button class="btn-primary-full" disabled style="background: #10b981;">
+                            <i class="bi bi-check-circle"></i> You're registered
                         </button>
-
-                        <!-- Cancel Registration Button -->
-                        <form asp-action="CancelRegistration" asp-route-id="@Model.Id" method="post"
-                              onsubmit="return confirm('Are you sure you want to cancel your registration for @Model.Name?');">
+                        <form asp-action="CancelRegistration" asp-route-id="@Model.Id" method="post">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn-cancel-registration">
-                                <i class="bi bi-x-circle"></i> Cancel Registration
+                            <button type="submit" class="btn-danger-full" onclick="return confirm('Cancel your registration?')">
+                                <i class="bi bi-x-circle"></i> Cancel registration
                             </button>
                         </form>
-
-                        <small class="text-muted d-block mt-2">
-                            <i class="bi bi-info-circle"></i> Check your "My Events" page for details
-                        </small>
                     }
                     else if ((Model.Registrations?.Count ?? 0) >= Model.Capacity)
                     {
-                        <button class="btn-register" disabled style="background: #6c757d; cursor: not-allowed;">
-                            <i class="bi bi-x-circle"></i> Event is Full
+                        <button class="btn-primary-full" disabled style="background: #94a3b8;">
+                            <i class="bi bi-x-circle"></i> Event is full
                         </button>
                     }
                     else
                     {
                         <form asp-action="Register" asp-route-id="@Model.Id" method="post">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn-register">
-                                <i class="bi bi-ticket-perforated"></i> Register Now
+                            <button type="submit" class="btn-primary-full">
+                                <i class="bi bi-ticket-perforated"></i> Register now
                             </button>
                         </form>
                     }
                 }
                 else
                 {
-                    <div>
-                        <a href="/Account/Login" class="btn-register" style="display: block; text-align: center; text-decoration: none;">
-                            <i class="bi bi-box-arrow-in-right"></i> Login to Register
-                        </a>
-                        <small class="text-muted d-block mt-2">
-                            Don't have an account? <a href="/Account/Register" style="color: #00d2ff;">Sign up here</a>
-                        </small>
-                    </div>
+                    <a href="/Account/Login" class="btn-primary-full text-center" style="text-decoration: none;">
+                        <i class="bi bi-box-arrow-in-right"></i> Sign in to register
+                    </a>
+                    <p class="text-center small text-muted mt-2">New here? <a href="/Account/Register" style="color: var(--accent-blue);">Create account</a></p>
                 }
-                <hr style="border-color: rgba(0,210,255,0.2); margin: 1.5rem 0;">
-
-                <!-- Share Buttons -->
-                <div class="text-center">
-                    <small class="text-muted">Share this event</small>
-                    <div class="mt-2">
-                        <a href="#" class="text-white me-2" style="text-decoration: none;">
-                            <i class="bi bi-facebook" style="color: #1877f2;"></i>
-                        </a>
-                        <a href="#" class="text-white me-2" style="text-decoration: none;">
-                            <i class="bi bi-twitter" style="color: #1da1f2;"></i>
-                        </a>
-                        <a href="#" class="text-white" style="text-decoration: none;">
-                            <i class="bi bi-whatsapp" style="color: #25d366;"></i>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -431,31 +300,25 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Initialize full map
         var map = L.map('fullMap');
-
         @if (Model.Latitude.HasValue && Model.Longitude.HasValue)
         {
-                    <text>
-                    map.setView([@Model.Latitude, @Model.Longitude], 15);
-                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    }).addTo(map);
-                    L.marker([@Model.Latitude, @Model.Longitude]).addTo(map)
-                        .bindPopup('<b>@Model.Name</b><br/>@Model.Location')
-                        .openPopup();
-                    </text>
+                <text>
+                map.setView([@Model.Latitude, @Model.Longitude], 14);
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; OpenStreetMap'
+                }).addTo(map);
+                L.marker([@Model.Latitude, @Model.Longitude]).addTo(map).bindPopup('@Model.Name').openPopup();
+                </text>
         }
         else
         {
-                    <text>
-                    map.setView([40.7128, -74.0060], 13);
-                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                        attribution: '&copy; OpenStreetMap'
-                    }).addTo(map);
-                    L.marker([40.7128, -74.0060]).addTo(map)
-                        .bindPopup('Location not specified');
-                    </text>
+                <text>
+                map.setView([40.7128, -74.0060], 12);
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; OpenStreetMap'
+                }).addTo(map);
+                </text>
         }
     </script>
 }

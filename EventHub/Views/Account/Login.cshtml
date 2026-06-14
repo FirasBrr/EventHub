@@ -11,235 +11,247 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 2rem;
+        padding: 40px 20px;
     }
 
     .login-card {
-        background: rgba(26, 26, 46, 0.95);
-        backdrop-filter: blur(10px);
+        max-width: 420px;
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
         border-radius: 20px;
-        border: 1px solid rgba(0, 210, 255, 0.2);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        transition: all 0.3s ease;
+        padding: 32px;
     }
-
-        .login-card:hover {
-            border-color: rgba(0, 210, 255, 0.5);
-            box-shadow: 0 25px 50px rgba(0, 210, 255, 0.1);
-        }
 
     .login-header {
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        padding: 2rem;
         text-align: center;
-        border-radius: 20px 20px 0 0;
+        margin-bottom: 28px;
     }
 
-        .login-header h3 {
-            margin: 0;
-            font-weight: 700;
+        .login-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-hi);
+            margin-bottom: 8px;
         }
 
-    .login-body {
-        padding: 2rem;
-    }
+        .login-header p {
+            color: var(--text-lo);
+            font-size: 0.85rem;
+        }
 
     .form-group {
-        margin-bottom: 1.5rem;
+        margin-bottom: 20px;
     }
 
-    .input-group-text {
-        background: rgba(26, 26, 46, 0.9);
-        border: 1px solid rgba(0, 210, 255, 0.2);
-        border-right: none;
-        color: #00d2ff;
-    }
-
-    .form-control {
-        background: rgba(26, 26, 46, 0.9);
-        border: 1px solid rgba(0, 210, 255, 0.2);
-        color: white;
-        padding: 0.75rem 1rem;
-    }
-
-        .form-control:focus {
-            background: rgba(26, 26, 46, 1);
-            border-color: #00d2ff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 210, 255, 0.25);
-            color: white;
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-md);
+            margin-bottom: 6px;
+            display: block;
         }
 
-        .form-control::placeholder {
-            color: #6c6c8a;
-        }
-
-    .btn-login-submit {
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        color: white;
-        padding: 0.75rem;
-        font-weight: 600;
+    .input-wrapper {
+        display: flex;
+        align-items: center;
+        background: var(--bg);
+        border: 1px solid var(--border);
         border-radius: 10px;
-        transition: all 0.3s ease;
-        width: 100%;
-        border: none;
+        transition: all 0.2s;
     }
 
-        .btn-login-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+        .input-wrapper:focus-within {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-    .checkbox-label {
-        color: #a0a0b0;
+    .input-icon {
+        padding: 0 12px;
+        color: var(--text-lo);
+        font-size: 0.9rem;
+    }
+
+    .input-wrapper input {
+        flex: 1;
+        padding: 11px 12px 11px 0;
+        background: transparent;
+        border: none;
+        color: var(--text-hi);
+        font-size: 0.9rem;
+        outline: none;
+    }
+
+        .input-wrapper input::placeholder {
+            color: var(--text-lo);
+        }
+
+    .toggle-password {
+        background: transparent;
+        border: none;
+        padding: 0 12px;
+        color: var(--text-lo);
         cursor: pointer;
     }
 
-    .form-check-input {
-        background-color: rgba(26, 26, 46, 0.9);
-        border-color: rgba(0, 210, 255, 0.3);
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 24px;
     }
 
-        .form-check-input:checked {
-            background-color: #00d2ff;
-            border-color: #00d2ff;
+        .checkbox-group input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent-blue);
+            margin: 0;
+        }
+
+        .checkbox-group label {
+            font-size: 0.8rem;
+            color: var(--text-md);
+            margin: 0;
+        }
+
+    .btn-login {
+        width: 100%;
+        background: var(--accent-blue);
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-login:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
         }
 
     .register-link {
         text-align: center;
-        margin-top: 1.5rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
     }
 
         .register-link a {
-            color: #00d2ff;
+            color: var(--accent-blue);
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.85rem;
         }
 
             .register-link a:hover {
-                color: #3a7bd5;
                 text-decoration: underline;
             }
 
-    .demo-credentials {
-        background: rgba(0, 210, 255, 0.1);
-        border-left: 4px solid #00d2ff;
-        border-radius: 10px;
-        padding: 1rem;
-        margin-top: 1.5rem;
+    .demo-box {
+        background: var(--bg);
+        border-radius: 12px;
+        padding: 16px;
+        margin-top: 24px;
     }
 
-        .demo-credentials small {
-            color: #a0a0b0;
+        .demo-box p {
+            font-size: 0.75rem;
+            color: var(--text-lo);
+            margin: 0;
         }
 
-        .demo-credentials strong {
-            color: #00d2ff;
+        .demo-box strong {
+            color: var(--accent-blue);
         }
 
     .validation-summary {
-        background: rgba(255, 0, 0, 0.1);
-        border-left: 4px solid #ff0000;
-        padding: 1rem;
+        background: #fef2f2;
         border-radius: 10px;
-        margin-bottom: 1.5rem;
+        padding: 12px;
+        margin-bottom: 20px;
+        font-size: 0.8rem;
+        color: #dc2626;
     }
 
-        .validation-summary ul {
-            margin: 0;
-            color: #ff6666;
-        }
+    .text-danger {
+        color: #dc2626 !important;
+        font-size: 0.7rem;
+        margin-top: 4px;
+        display: block;
+    }
+
+    hr {
+        margin: 20px 0;
+        border-color: var(--border);
+    }
 </style>
 
-<div class="container login-container">
-    <div class="row justify-content-center w-100">
-        <div class="col-md-6 col-lg-5">
-            <div class="login-card">
-                <div class="login-header">
-                    <h3>
-                        <i class="bi bi-box-arrow-in-right"></i> Welcome Back!
-                    </h3>
-                    <p class="mb-0 mt-2">Sign in to continue to EventHub</p>
-                </div>
-
-                <div class="login-body">
-                    <form asp-action="Login" method="post">
-                        @Html.AntiForgeryToken()
-
-                        <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
-
-                        <div class="form-group">
-                            <label asp-for="UsernameOrEmail" class="form-label text-light mb-2">
-                                <i class="bi bi-person-circle"></i> Username or Email
-                            </label>
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="bi bi-envelope"></i>
-                                </span>
-                                <input asp-for="UsernameOrEmail" class="form-control"
-                                       placeholder="Enter your username or email" autofocus />
-                            </div>
-                            <span asp-validation-for="UsernameOrEmail" class="text-danger small"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="Password" class="form-label text-light mb-2">
-                                <i class="bi bi-lock"></i> Password
-                            </label>
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="bi bi-key"></i>
-                                </span>
-                                <input asp-for="Password" class="form-control" type="password"
-                                       placeholder="Enter your password" />
-                                <button class="btn btn-outline-secondary" type="button"
-                                        onclick="togglePassword()" style="background: rgba(26, 26, 46, 0.9); border-color: rgba(0,210,255,0.2);">
-                                    <i class="bi bi-eye" id="toggleIcon"></i>
-                                </button>
-                            </div>
-                            <span asp-validation-for="Password" class="text-danger small"></span>
-                        </div>
-
-                        <div class="form-group form-check">
-                            <input asp-for="RememberMe" class="form-check-input" />
-                            <label asp-for="RememberMe" class="form-check-label checkbox-label">
-                                <i class="bi bi-check2-circle"></i> Remember me
-                            </label>
-                        </div>
-
-                        <button type="submit" class="btn btn-login-submit">
-                            <i class="bi bi-box-arrow-in-right"></i> Sign In
-                        </button>
-
-                        <div class="register-link">
-                            <p class="mb-0">
-                                Don't have an account?
-                                <a asp-action="Register">
-                                    <i class="bi bi-person-plus"></i> Create an account
-                                </a>
-                            </p>
-                        </div>
-
-                        <div class="demo-credentials">
-                            <small>
-                                <i class="bi bi-info-circle"></i> <strong>Demo Credentials:</strong><br />
-                                <i class="bi bi-envelope"></i> Email: admin@eventhub.com<br />
-                                <i class="bi bi-key"></i> Password: Admin@123
-                            </small>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Welcome back</h2>
+            <p>Sign in to your account</p>
         </div>
+
+        <form asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+            <div class="form-group">
+                <label asp-for="UsernameOrEmail">Username or email</label>
+                <div class="input-wrapper">
+                    <span class="input-icon"><i class="bi bi-envelope"></i></span>
+                    <input asp-for="UsernameOrEmail" placeholder="Enter your username or email" autofocus />
+                </div>
+                <span asp-validation-for="UsernameOrEmail" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password">Password</label>
+                <div class="input-wrapper">
+                    <span class="input-icon"><i class="bi bi-key"></i></span>
+                    <input asp-for="Password" type="password" id="password" placeholder="Enter your password" />
+                    <button type="button" class="toggle-password" onclick="togglePassword()">
+                        <i class="bi bi-eye" id="toggleIcon"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="checkbox-group">
+                <input asp-for="RememberMe" id="rememberMe" />
+                <label asp-for="RememberMe">Remember me</label>
+            </div>
+
+            <button type="submit" class="btn-login">
+                <i class="bi bi-box-arrow-in-right"></i> Sign in
+            </button>
+
+            <div class="register-link">
+                <a asp-action="Register">
+                    <i class="bi bi-person-plus"></i> Create an account
+                </a>
+            </div>
+
+            <div class="demo-box">
+                <p>
+                    <i class="bi bi-info-circle"></i> <strong>Demo credentials</strong><br />
+                    Email: <strong>admin@eventhub.com</strong><br />
+                    Password: <strong>Admin@123</strong>
+                </p>
+            </div>
+        </form>
     </div>
 </div>
 
 <script>
     function togglePassword() {
-        const passwordField = document.querySelector('#Password');
-        const toggleIcon = document.querySelector('#toggleIcon');
+        const passwordField = document.getElementById('password');
+        const toggleIcon = document.getElementById('toggleIcon');
 
         if (passwordField.type === 'password') {
             passwordField.type = 'text';

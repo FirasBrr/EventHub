@@ -7,362 +7,429 @@
 
 <style>
     .events-header {
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        padding: 3rem 0;
-        margin-bottom: 2rem;
-        border-radius: 0 0 30px 30px;
+        background: linear-gradient(135deg, #eff6ff 0%, #f0f4f8 100%);
+        padding: 48px 0;
+        margin-bottom: 0;
+        border-bottom: 1px solid var(--border);
     }
 
-    .filter-card {
-        background: rgba(26, 26, 46, 0.95);
+        .events-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
+        }
+
+    /* Filter Section - Modern Redesign */
+    .filter-wrapper {
+        background: var(--bg2);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 72px;
+        z-index: 99;
         backdrop-filter: blur(10px);
-        border-radius: 15px;
-        border: 1px solid rgba(0, 210, 255, 0.2);
-        margin-bottom: 2rem;
-        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.98);
     }
 
-    .filter-section {
-        border-bottom: 1px solid rgba(0, 210, 255, 0.1);
-        padding-bottom: 1rem;
-        margin-bottom: 1rem;
+    .filter-container {
+        padding: 20px 0;
     }
 
-        .filter-section:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-            margin-bottom: 0;
-        }
-
-    .filter-title {
-        color: #00d2ff;
-        font-size: 0.9rem;
-        font-weight: 600;
-        margin-bottom: 0.75rem;
-    }
-
-    .price-range {
+    .filter-row {
         display: flex;
-        gap: 10px;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 16px;
+    }
+
+    .filter-group {
+        flex: 1;
+        min-width: 180px;
+    }
+
+        .filter-group label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-lo);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-hi);
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+            .filter-group input:focus,
+            .filter-group select:focus {
+                outline: none;
+                border-color: var(--accent-blue);
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+
+    .price-group {
+        display: flex;
+        gap: 8px;
+    }
+
+        .price-group input {
+            width: 100%;
+        }
+
+    .free-check {
+        display: flex;
         align-items: center;
+        gap: 8px;
+        margin-top: 22px;
     }
 
-        .price-range input {
-            width: 100px;
+        .free-check input {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            accent-color: var(--accent-blue);
         }
 
-    .sort-badge {
-        display: inline-block;
-        padding: 5px 12px;
-        background: rgba(0, 210, 255, 0.1);
-        border-radius: 20px;
+        .free-check label {
+            margin: 0;
+            text-transform: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-md);
+        }
+
+    .btn-apply {
+        background: var(--accent-blue);
+        color: white;
+        border: none;
+        padding: 10px 24px;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        font-size: 0.875rem;
         cursor: pointer;
-        transition: all 0.3s ease;
-        margin-right: 8px;
-        margin-bottom: 8px;
+        transition: all 0.2s;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-        .sort-badge:hover, .sort-badge.active {
-            background: rgba(0, 210, 255, 0.3);
-            color: #00d2ff;
+        .btn-apply:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
         }
+
+    .btn-clear {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-md);
+        padding: 9px 20px;
+        border-radius: var(--radius-sm);
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-clear:hover {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+    /* Sort Bar */
+    .sort-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin: 24px 0 32px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .results-info {
+        font-size: 0.875rem;
+        color: var(--text-md);
+    }
+
+        .results-info strong {
+            color: var(--accent-blue);
+        }
+
+    .sort-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .sort-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 40px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--text-md);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .sort-chip:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .sort-chip.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+
+    /* Event Cards */
+    .events-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 24px;
+        margin-top: 24px;
+    }
 
     .event-card {
-        background: rgba(26, 26, 46, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        border: 1px solid rgba(0, 210, 255, 0.1);
-        transition: all 0.3s ease;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
         overflow: hidden;
-        height: 100%;
+        transition: all 0.25s ease;
     }
 
         .event-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 210, 255, 0.5);
-            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.2);
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
         }
 
     .event-image {
-        height: 200px;
-        object-fit: cover;
-        width: 100%;
+        height: 180px;
+        background: var(--bg);
+        position: relative;
+        overflow: hidden;
     }
 
     .event-badge {
         position: absolute;
-        top: 15px;
-        right: 15px;
-        padding: 5px 15px;
+        top: 12px;
+        right: 12px;
+        padding: 4px 12px;
         border-radius: 20px;
-        font-size: 12px;
-        font-weight: bold;
+        font-size: 0.7rem;
+        font-weight: 600;
         z-index: 1;
     }
 
     .event-category {
-        display: inline-block;
-        padding: 4px 12px;
-        background: rgba(0, 210, 255, 0.2);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--accent-blue);
+        background: rgba(59, 130, 246, 0.1);
+        padding: 4px 10px;
         border-radius: 20px;
-        font-size: 12px;
-        color: #00d2ff;
+        margin-bottom: 12px;
+    }
+
+    .event-title {
+        font-family: 'Syne', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-hi);
+        margin-bottom: 8px;
     }
 
     .event-meta {
         display: flex;
-        gap: 15px;
-        font-size: 14px;
-        color: #a0a0b0;
-        margin: 10px 0;
+        flex-wrap: wrap;
+        gap: 16px;
+        font-size: 0.75rem;
+        color: var(--text-lo);
+        margin: 12px 0;
     }
 
         .event-meta i {
-            color: #00d2ff;
-            margin-right: 5px;
+            color: var(--accent-blue);
+            width: 16px;
+            margin-right: 4px;
         }
 
     .price-tag {
-        font-size: 1.3rem;
-        font-weight: bold;
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-family: 'Syne', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-hi);
     }
 
-    .btn-view {
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        color: white;
-        padding: 8px 20px;
-        border-radius: 25px;
-        transition: all 0.3s ease;
-        border: none;
-        display: inline-block;
-        text-decoration: none;
-        font-size: 0.875rem;
-    }
-
-        .btn-view:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
-            color: white;
+        .price-tag.free {
+            color: #10b981;
         }
 
-    .btn-register-event {
+    .btn-outline-blue {
         background: transparent;
-        border: 2px solid #00d2ff;
-        color: #00d2ff;
-        padding: 6px 18px;
-        border-radius: 25px;
-        transition: all 0.3s ease;
-        display: inline-block;
+        border: 1px solid var(--accent-blue);
+        color: var(--accent-blue);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
         text-decoration: none;
-        font-size: 0.875rem;
+        transition: all 0.2s;
     }
 
-        .btn-register-event:hover {
-            background: rgba(0, 210, 255, 0.1);
-            transform: translateY(-2px);
-            color: #00d2ff;
+        .btn-outline-blue:hover {
+            background: var(--accent-blue);
+            color: white;
         }
 
     .empty-state {
         text-align: center;
-        padding: 4rem;
-        background: rgba(26, 26, 46, 0.95);
-        border-radius: 15px;
-        border: 1px solid rgba(0, 210, 255, 0.2);
+        padding: 80px 20px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
     }
 
         .empty-state i {
-            font-size: 4rem;
-            color: #00d2ff;
-            margin-bottom: 1rem;
+            font-size: 3rem;
+            color: var(--text-lo);
+            margin-bottom: 16px;
         }
 
-    .search-input, .filter-select {
-        background: rgba(26, 26, 46, 0.9);
-        border: 1px solid rgba(0, 210, 255, 0.2);
-        color: white;
+    .admin-actions {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        gap: 16px;
     }
 
-        .search-input:focus, .filter-select:focus {
-            background: rgba(26, 26, 46, 1);
-            border-color: #00d2ff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 210, 255, 0.25);
-            color: white;
+        .admin-actions a {
+            font-size: 0.7rem;
+            text-decoration: none;
         }
-
-    .results-count {
-        color: #00d2ff;
-        font-weight: 500;
-    }
-
-    .clear-filters {
-        color: #dc3545;
-        text-decoration: none;
-        font-size: 0.85rem;
-    }
-
-        .clear-filters:hover {
-            text-decoration: underline;
-        }
-
-    .bg-gradient {
-        background: linear-gradient(135deg, rgba(0,210,255,0.2), rgba(58,123,213,0.2));
-    }
-
-    @@media (max-width: 768px) {
-        .events-header {
-            padding: 2rem 0;
-        }
-
-        .filter-card {
-            padding: 1rem;
-        }
-
-        .price-range {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-            .price-range input {
-                width: 100%;
-            }
-    }
 </style>
 
+<!-- Header -->
 <div class="events-header">
     <div class="container">
-        <h1 class="text-white text-center mb-3">
-            <i class="bi bi-calendar-event-fill"></i> Discover Events
-        </h1>
-        <p class="text-white text-center opacity-75">Find and join amazing events happening near you</p>
+        <h1>Discover events</h1>
+        <p class="text-muted" style="color: var(--text-md);">Find and join amazing experiences happening near you</p>
+    </div>
+</div>
+
+<!-- Sticky Filter Bar -->
+<div class="filter-wrapper">
+    <div class="container filter-container">
+        <form asp-action="Index" method="get" id="filterForm">
+            <div class="filter-row">
+                <div class="filter-group" style="flex: 2;">
+                    <label><i class="bi bi-search"></i> Search</label>
+                    <input type="text" name="searchTerm" id="searchTerm" class="form-control"
+                           placeholder="Event name, location, or description..."
+                           value="@ViewBag.CurrentSearchTerm">
+                </div>
+
+                <div class="filter-group">
+                    <label><i class="bi bi-tag"></i> Category</label>
+                    <select name="category" id="category">
+                        <option value="">All</option>
+                        <option value="Conference">Conference</option>
+                        <option value="Workshop">Workshop</option>
+                        <option value="Music">Music</option>
+                        <option value="Networking">Networking</option>
+                        <option value="Sports">Sports</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label><i class="bi bi-currency-dollar"></i> Price range</label>
+                    <div class="price-group">
+                        <input type="number" name="minPrice" id="minPrice" placeholder="Min" value="@ViewBag.MinPrice">
+                        <span style="color: var(--text-lo);">—</span>
+                        <input type="number" name="maxPrice" id="maxPrice" placeholder="Max" value="@ViewBag.MaxPrice">
+                    </div>
+                </div>
+
+                <div class="free-check">
+                    <input type="checkbox" name="showFree" id="showFree" value="true" @(ViewBag.ShowFree == true ? "checked" : "")>
+                    <label for="showFree">Free only</label>
+                </div>
+
+                <button type="submit" class="btn-apply">
+                    <i class="bi bi-search"></i> Apply
+                </button>
+                <a href="/Event" class="btn-clear">
+                    <i class="bi bi-x-lg"></i> Clear
+                </a>
+            </div>
+
+            <!-- Hidden date inputs for advanced -->
+            <div class="row mt-3" style="display: none;">
+                <div class="col-md-4">
+                    <input type="date" name="dateFrom" id="dateFrom" value="@ViewBag.DateFrom">
+                </div>
+                <div class="col-md-4">
+                    <input type="date" name="dateTo" id="dateTo" value="@ViewBag.DateTo">
+                </div>
+            </div>
+            <input type="hidden" name="sortBy" id="sortBy" value="@ViewBag.SortBy">
+        </form>
     </div>
 </div>
 
 <div class="container mb-5">
-    <!-- Advanced Filter Section -->
-    <div class="filter-card">
-        <form asp-action="Index" method="get" id="filterForm">
-            <!-- Search Bar -->
-            <div class="filter-section">
-                <div class="input-group">
-                    <span class="input-group-text bg-transparent" style="border-color: rgba(0,210,255,0.2); color: #00d2ff;">
-                        <i class="bi bi-search"></i>
-                    </span>
-                    <input type="text" name="searchTerm" id="searchTerm" class="form-control search-input"
-                           placeholder="Search by name, description, or location..."
-                           value="@ViewBag.CurrentSearchTerm">
-                </div>
-            </div>
-
-            <!-- Category Filter -->
-            <div class="filter-section">
-                <div class="filter-title">
-                    <i class="bi bi-tag"></i> Category
-                </div>
-                <select name="category" id="category" class="form-select filter-select">
-                    <option value="">All Categories</option>
-                    <option value="Conference">Conference</option>
-                    <option value="Workshop">Workshop</option>
-                    <option value="Music">Music</option>
-                    <option value="Networking">Networking</option>
-                    <option value="Sports">Sports</option>
-                </select>
-            </div>
-
-            <!-- Price Range Filter -->
-            <div class="filter-section">
-                <div class="filter-title">
-                    <i class="bi bi-currency-dollar"></i> Price Range
-                </div>
-                <div class="price-range">
-                    <div class="flex-grow-1">
-                        <label class="small text-muted">Min Price ($)</label>
-                        <input type="number" name="minPrice" id="minPrice" class="form-control search-input"
-                               placeholder="0" value="@ViewBag.MinPrice" step="10">
-                    </div>
-                    <div class="flex-grow-1">
-                        <label class="small text-muted">Max Price ($)</label>
-                        <input type="number" name="maxPrice" id="maxPrice" class="form-control search-input"
-                               placeholder="Any" value="@ViewBag.MaxPrice" step="10">
-                    </div>
-                </div>
-                <div class="form-check mt-2">
-                    <input type="checkbox" name="showFree" id="showFree" class="form-check-input"
-                           value="true" @(ViewBag.ShowFree == true ? "checked" : "")>
-                    <label class="form-check-label text-white" for="showFree">
-                        <i class="bi bi-gift"></i> Show only free events
-                    </label>
-                </div>
-            </div>
-
-            <!-- Date Range Filter -->
-            <div class="filter-section">
-                <div class="filter-title">
-                    <i class="bi bi-calendar"></i> Date Range
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="small text-muted">From</label>
-                        <input type="date" name="dateFrom" id="dateFrom" class="form-control search-input"
-                               value="@ViewBag.DateFrom">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="small text-muted">To</label>
-                        <input type="date" name="dateTo" id="dateTo" class="form-control search-input"
-                               value="@ViewBag.DateTo">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sorting Options -->
-            <div class="filter-section">
-                <div class="filter-title">
-                    <i class="bi bi-sort-up"></i> Sort By
-                </div>
-                <div>
-                    <div class="sort-badge @(ViewBag.SortBy == "date_asc" ? "active" : "")" data-sort="date_asc">
-                        <i class="bi bi-calendar"></i> Date (Earliest)
-                    </div>
-                    <div class="sort-badge @(ViewBag.SortBy == "date_desc" ? "active" : "")" data-sort="date_desc">
-                        <i class="bi bi-calendar"></i> Date (Latest)
-                    </div>
-                    <div class="sort-badge @(ViewBag.SortBy == "price_asc" ? "active" : "")" data-sort="price_asc">
-                        <i class="bi bi-arrow-up"></i> Price (Low to High)
-                    </div>
-                    <div class="sort-badge @(ViewBag.SortBy == "price_desc" ? "active" : "")" data-sort="price_desc">
-                        <i class="bi bi-arrow-down"></i> Price (High to Low)
-                    </div>
-                    <div class="sort-badge @(ViewBag.SortBy == "popularity" ? "active" : "")" data-sort="popularity">
-                        <i class="bi bi-graph-up"></i> Most Popular
-                    </div>
-                </div>
-                <input type="hidden" name="sortBy" id="sortBy" value="@ViewBag.SortBy">
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="d-flex justify-content-between align-items-center mt-3">
-                <button type="submit" class="btn-view">
-                    <i class="bi bi-search"></i> Apply Filters
-                </button>
-                <a href="/Event" class="clear-filters">
-                    <i class="bi bi-x-circle"></i> Clear All Filters
-                </a>
-            </div>
-        </form>
-    </div>
-
-    <!-- Results Count -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="results-count">
-            <i class="bi bi-calendar-check"></i> Found <strong>@Model.Count()</strong> events
+    <!-- Sort Bar -->
+    <div class="sort-bar">
+        <div class="results-info">
+            <i class="bi bi-calendar3"></i> <strong>@Model.Count()</strong> events found
+        </div>
+        <div class="sort-options">
+            <span class="sort-chip" data-sort="date_asc">
+                <i class="bi bi-calendar"></i> Earliest
+            </span>
+            <span class="sort-chip" data-sort="date_desc">
+                <i class="bi bi-calendar"></i> Latest
+            </span>
+            <span class="sort-chip" data-sort="price_asc">
+                <i class="bi bi-arrow-up"></i> Price low
+            </span>
+            <span class="sort-chip" data-sort="price_desc">
+                <i class="bi bi-arrow-down"></i> Price high
+            </span>
+            <span class="sort-chip" data-sort="popularity">
+                <i class="bi bi-graph-up"></i> Popular
+            </span>
         </div>
         @if (User.IsInRole("Admin"))
         {
-            <a asp-action="Create" class="btn-view">
-                <i class="bi bi-plus-circle"></i> Create New Event
+            <a href="/Event/Create" class="btn-outline-blue" style="padding: 6px 16px;">
+                <i class="bi bi-plus-circle"></i> Create event
             </a>
         }
     </div>
@@ -372,84 +439,80 @@
     {
         <div class="empty-state">
             <i class="bi bi-calendar-x"></i>
-            <h3 class="text-white">No events found</h3>
-            <p class="text-muted">Try adjusting your filters or check back later for new events.</p>
-            <a href="/Event" class="btn-view mt-3" style="display: inline-block;">Clear Filters</a>
+            <h5 class="text-white mb-2">No events found</h5>
+            <p class="text-muted">Try adjusting your filters or check back later.</p>
+            <a href="/Event" class="btn-outline-blue mt-3" style="display: inline-block;">Clear filters</a>
         </div>
     }
     else
     {
-        <div class="row g-4">
+        <div class="events-grid">
             @foreach (var item in Model)
             {
-                <div class="col-md-6 col-lg-4">
-                    <div class="event-card">
-                        <div class="position-relative">
-                            @if (item.Latitude.HasValue && item.Longitude.HasValue)
-                            {
-                                <div id="miniMap-@item.Id" class="event-image" style="height: 200px;"></div>
-                            }
-                            else
-                            {
-                                <div class="event-image bg-gradient d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, rgba(0,210,255,0.2), rgba(58,123,213,0.2));">
-                                    <i class="bi bi-map" style="font-size: 3rem; color: #00d2ff;"></i>
-                                </div>
-                            }
-                            <span class="event-badge" style="background: @(item.IsFree ? "#28a745" : "#00d2ff")">
-                                @(item.IsFree ? "FREE" : "PAID")
+                <div class="event-card">
+                    <div class="event-image position-relative">
+                        @if (item.Latitude.HasValue && item.Longitude.HasValue)
+                        {
+                            <div id="miniMap-@item.Id" style="height: 180px;"></div>
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center justify-content-center h-100" style="background: var(--bg);">
+                                <i class="bi bi-geo-alt" style="font-size: 2rem; color: var(--text-lo);"></i>
+                            </div>
+                        }
+                        <span class="event-badge" style="background: @(item.IsFree ? "#10b981" : "var(--accent-blue)"); color: white;">
+                            @(item.IsFree ? "FREE" : "PAID")
+                        </span>
+                    </div>
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="event-category">
+                                <i class="bi bi-tag"></i> @item.Category
                             </span>
+                            <small class="text-muted">
+                                <i class="bi bi-people"></i> @(item.Registrations?.Count ?? 0)/@item.Capacity
+                            </small>
                         </div>
 
-                        <div class="p-3">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <span class="event-category">
-                                    <i class="bi bi-tag"></i> @item.Category
-                                </span>
-                                <small class="text-muted">
-                                    <i class="bi bi-people"></i> @(item.Registrations?.Count ?? 0)/@item.Capacity
-                                </small>
-                            </div>
+                        <h5 class="event-title">@item.Name</h5>
 
-                            <h5 class="text-white fw-bold mb-2">@item.Name</h5>
-
-                            <div class="event-meta">
-                                <span><i class="bi bi-calendar"></i> @item.DateTime.ToString("MMM dd, yyyy")</span>
-                                <span><i class="bi bi-clock"></i> @item.DateTime.ToString("h:mm tt")</span>
-                            </div>
-
-                            <div class="event-meta">
-                                <span><i class="bi bi-geo-alt"></i> @item.Location</span>
-                            </div>
-
-                            <p class="text-muted small mt-2">@(item.Description.Length > 100 ? item.Description.Substring(0, 100) + "..." : item.Description)</p>
-
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <span class="price-tag">@(item.IsFree ? "FREE" : item.Price.ToString("C"))</span>
-                                <div>
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn-view" style="padding: 6px 15px; font-size: 0.8rem; margin-right: 5px;">
-                                        <i class="bi bi-eye"></i> View
-                                    </a>
-                                    @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
-                                    {
-                                        <a asp-action="Register" asp-route-id="@item.Id" class="btn-register-event" style="padding: 6px 15px; font-size: 0.8rem;">
-                                            <i class="bi bi-ticket"></i> Register
-                                        </a>
-                                    }
-                                </div>
-                            </div>
-
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <div class="mt-3 pt-2 border-top" style="border-color: rgba(0,210,255,0.1);">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="text-warning me-3 text-decoration-none small">
-                                        <i class="bi bi-pencil"></i> Edit
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger text-decoration-none small">
-                                        <i class="bi bi-trash"></i> Delete
-                                    </a>
-                                </div>
-                            }
+                        <div class="event-meta">
+                            <span><i class="bi bi-calendar3"></i> @item.DateTime.ToString("MMM dd, yyyy")</span>
+                            <span><i class="bi bi-clock"></i> @item.DateTime.ToString("h:mm tt")</span>
                         </div>
+                        <div class="event-meta">
+                            <span><i class="bi bi-geo-alt"></i> @item.Location</span>
+                        </div>
+
+                        <p class="text-muted small mt-2">@(item.Description.Length > 100 ? item.Description.Substring(0, 100) + "..." : item.Description)</p>
+
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-2" style="border-top: 1px solid var(--border);">
+                            <span class="price-tag @(item.IsFree ? "free" : "")">@(item.IsFree ? "FREE" : item.Price.ToString("C"))</span>
+                            <div class="d-flex gap-2">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn-outline-blue">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                                @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
+                                {
+                                    <a asp-action="Register" asp-route-id="@item.Id" class="btn-outline-blue">
+                                        <i class="bi bi-ticket"></i> Register
+                                    </a>
+                                }
+                            </div>
+                        </div>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="admin-actions">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="text-warning">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">
+                                    <i class="bi bi-trash"></i> Delete
+                                </a>
+                            </div>
+                        }
                     </div>
                 </div>
             }
@@ -460,41 +523,46 @@
 @section Scripts {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
     <script>
-        // Sort badge click handler
-        document.querySelectorAll('.sort-badge').forEach(badge => {
-            badge.addEventListener('click', function() {
-                const sortValue = this.getAttribute('data-sort');
-                document.getElementById('sortBy').value = sortValue;
+        // Active sort highlight
+        const currentSort = '@ViewBag.SortBy';
+        document.querySelectorAll('.sort-chip').forEach(chip => {
+            if (chip.dataset.sort === currentSort || (currentSort === '' && chip.dataset.sort === 'date_asc')) {
+                chip.classList.add('active');
+            }
+            chip.addEventListener('click', () => {
+                document.getElementById('sortBy').value = chip.dataset.sort;
                 document.getElementById('filterForm').submit();
             });
         });
 
-        // Auto-submit on checkbox change
-        document.getElementById('showFree').addEventListener('change', function() {
+        // Auto-submit on checkbox
+        document.getElementById('showFree')?.addEventListener('change', () => {
             document.getElementById('filterForm').submit();
         });
 
-        // Debounced search (optional - submits after typing stops)
+        // Debounced search
         let searchTimeout;
-        document.getElementById('searchTerm').addEventListener('input', function() {
+        document.getElementById('searchTerm')?.addEventListener('input', function() {
             clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                document.getElementById('filterForm').submit();
-            }, 500);
+            searchTimeout = setTimeout(() => document.getElementById('filterForm').submit(), 400);
         });
 
-        // Map initialization for mini maps
+        // Category and price auto-submit
+        ['category', 'minPrice', 'maxPrice'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('change', () => document.getElementById('filterForm').submit());
+        });
+
+        // Mini maps
         @foreach (var item in Model.Where(e => e.Latitude.HasValue && e.Longitude.HasValue))
         {
                 <text>
                 var map@(item.Id) = L.map('miniMap-@item.Id').setView([@item.Latitude, @item.Longitude], 13);
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; OpenStreetMap'
                 }).addTo(map@(item.Id));
-                L.marker([@item.Latitude, @item.Longitude]).addTo(map@(item.Id))
-                    .bindPopup('<b>@item.Name</b><br/>@item.Location');
+                L.marker([@item.Latitude, @item.Longitude]).addTo(map@(item.Id));
                 </text>
         }
     </script>

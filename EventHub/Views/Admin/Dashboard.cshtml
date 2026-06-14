@@ -6,373 +6,416 @@
 }
 
 <style>
-    .dashboard-header {
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        padding: 2rem 0;
-        margin-bottom: 2rem;
+    /* Clean system fonts */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
     }
 
+    .dashboard-header {
+        background: linear-gradient(135deg, var(--accent-blue) 0%, #2563eb 100%);
+        padding: 28px 0;
+        margin-bottom: 32px;
+    }
+
+        .dashboard-header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
     .stat-card {
-        background: rgba(26, 26, 46, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        border: 1px solid rgba(0, 210, 255, 0.2);
-        padding: 1.5rem;
-        transition: all 0.3s ease;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.2s;
         height: 100%;
     }
 
         .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 210, 255, 0.5);
-        }
-
-    .stat-icon {
-        width: 50px;
-        height: 50px;
-        background: rgba(0, 210, 255, 0.1);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 1rem;
-    }
-
-        .stat-icon i {
-            font-size: 1.5rem;
-            color: #00d2ff;
+            transform: translateY(-2px);
+            border-color: var(--accent-blue);
         }
 
     .stat-value {
         font-size: 2rem;
-        font-weight: bold;
-        color: white;
-        margin-bottom: 0.25rem;
+        font-weight: 700;
+        color: var(--text-hi);
+        margin-bottom: 4px;
     }
 
     .stat-label {
-        color: #a0a0b0;
-        font-size: 0.85rem;
+        color: var(--text-lo);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 500;
     }
 
     .stat-change {
-        font-size: 0.75rem;
-        margin-top: 0.5rem;
+        font-size: 0.7rem;
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px solid var(--border);
     }
 
         .stat-change.positive {
-            color: #28a745;
-        }
-
-        .stat-change.negative {
-            color: #dc3545;
+            color: #10b981;
         }
 
     .dashboard-card {
-        background: rgba(26, 26, 46, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        border: 1px solid rgba(0, 210, 255, 0.2);
-        padding: 1.5rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
         height: 100%;
     }
 
     .card-title {
-        color: #00d2ff;
         font-weight: 600;
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid rgba(0, 210, 255, 0.2);
+        font-size: 0.9rem;
+        color: var(--text-hi);
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .card-title i {
+            color: var(--accent-blue);
+            font-size: 1rem;
+        }
+
+    .chart-container {
+        position: relative;
+        height: 250px;
+        margin-top: 8px;
     }
 
     .event-item, .registration-item {
-        padding: 0.75rem 0;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-        transition: all 0.3s ease;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
     }
 
-        .event-item:hover, .registration-item:hover {
-            background: rgba(0, 210, 255, 0.05);
-            padding-left: 10px;
-        }
-
-    .category-bar {
-        background: rgba(255,255,255,0.1);
-        border-radius: 10px;
-        height: 8px;
-        overflow: hidden;
-        margin: 5px 0;
-    }
-
-    .category-fill {
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        height: 100%;
-        border-radius: 10px;
-        transition: width 0.3s ease;
-    }
-
-    .btn-action {
-        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-        color: white;
-        padding: 8px 20px;
-        border-radius: 25px;
-        transition: all 0.3s ease;
-        border: none;
-        font-size: 0.85rem;
-    }
-
-        .btn-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
-            color: white;
+        .event-item:last-child, .registration-item:last-child {
+            border-bottom: none;
         }
 
     .status-badge {
         display: inline-block;
-        padding: 3px 10px;
+        padding: 2px 8px;
         border-radius: 20px;
-        font-size: 0.7rem;
-        font-weight: 600;
+        font-size: 0.6rem;
+        font-weight: 500;
     }
 
     .status-active {
-        background: rgba(40, 167, 69, 0.2);
-        color: #28a745;
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
     }
 
     .status-inactive {
-        background: rgba(220, 53, 69, 0.2);
-        color: #dc3545;
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
     }
 
     .status-upcoming {
-        background: rgba(0, 210, 255, 0.2);
-        color: #00d2ff;
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--accent-blue);
+    }
+
+    .category-bar {
+        background: var(--bg);
+        border-radius: 6px;
+        height: 6px;
+        overflow: hidden;
+        margin: 6px 0;
+    }
+
+    .category-fill {
+        background: var(--accent-blue);
+        height: 100%;
+        border-radius: 6px;
     }
 
     .view-all-link {
-        color: #00d2ff;
+        color: var(--accent-blue);
         text-decoration: none;
-        font-size: 0.85rem;
+        font-size: 0.7rem;
+        font-weight: 500;
     }
 
-        .view-all-link:hover {
-            text-decoration: underline;
-        }
+    .empty-message {
+        text-align: center;
+        padding: 30px 20px;
+        color: var(--text-lo);
+        font-size: 0.8rem;
+    }
+
+    .text-muted {
+        color: var(--text-lo) !important;
+        font-size: 0.7rem;
+    }
 </style>
 
 <div class="dashboard-header">
     <div class="container">
-        <h1 class="text-white mb-2">
-            <i class="bi bi-speedometer2"></i> Admin Dashboard
+        <h1>
+            <i class="bi bi-speedometer2"></i> Dashboard
         </h1>
-        <p class="text-white opacity-75">Welcome back, Admin! Here's what's happening with your events.</p>
     </div>
 </div>
 
 <div class="container mb-5">
-    <!-- Statistics Cards -->
-    <div class="row g-4 mb-4">
+    <!-- Stats Row 1 -->
+    <div class="row g-3 mb-3">
         <div class="col-md-6 col-lg-3">
             <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="bi bi-calendar-event"></i>
-                </div>
                 <div class="stat-value">@Model.TotalEvents</div>
-                <div class="stat-label">Total Events</div>
-                <div class="stat-change positive">
-                    <i class="bi bi-arrow-up"></i> @Model.EventsThisMonth this month
-                </div>
+                <div class="stat-label">Total events</div>
+                <div class="stat-change positive">+@Model.EventsThisMonth this month</div>
             </div>
         </div>
-
         <div class="col-md-6 col-lg-3">
             <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="bi bi-calendar-check"></i>
-                </div>
                 <div class="stat-value">@Model.ActiveEvents</div>
-                <div class="stat-label">Active Events</div>
-                <div class="stat-change positive">
-                    <i class="bi bi-calendar"></i> Upcoming
-                </div>
+                <div class="stat-label">Active events</div>
+                <div class="stat-change positive">Upcoming</div>
             </div>
         </div>
-
         <div class="col-md-6 col-lg-3">
             <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="bi bi-people"></i>
-                </div>
                 <div class="stat-value">@Model.TotalUsers</div>
-                <div class="stat-label">Total Users</div>
-                <div class="stat-change positive">
-                    <i class="bi bi-person-plus"></i> Active members
-                </div>
+                <div class="stat-label">Total users</div>
+                <div class="stat-change positive">Active members</div>
             </div>
         </div>
-
         <div class="col-md-6 col-lg-3">
             <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="bi bi-ticket"></i>
-                </div>
                 <div class="stat-value">@Model.TotalRegistrations</div>
-                <div class="stat-label">Total Registrations</div>
-                <div class="stat-change positive">
-                    <i class="bi bi-arrow-up"></i> @Model.RegistrationsThisMonth this month
-                </div>
+                <div class="stat-label">Registrations</div>
+                <div class="stat-change positive">+@Model.RegistrationsThisMonth this month</div>
             </div>
         </div>
     </div>
 
-    <div class="row g-4 mb-4">
+    <!-- Stats Row 2 -->
+    <div class="row g-3 mb-4">
         <div class="col-md-6">
             <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="bi bi-currency-dollar"></i>
-                </div>
                 <div class="stat-value">@Model.TotalRevenue.ToString("C0")</div>
-                <div class="stat-label">Total Revenue</div>
-                <div class="stat-change positive">
-                    <i class="bi bi-graph-up"></i> From paid events
+                <div class="stat-label">Revenue</div>
+                <div class="stat-change positive">From paid events</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="stat-value">@(Model.TotalEvents > 0 ? (Model.TotalRegistrations / Model.TotalEvents).ToString("F1") : "0")</div>
+                <div class="stat-label">Avg per event</div>
+                <div class="stat-change positive">Registrations</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+            <div class="dashboard-card">
+                <div class="card-title">
+                    <i class="bi bi-graph-up"></i> Registrations
+                    <span class="ms-auto text-muted">Last 6 months</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="registrationsChart"></canvas>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-6">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="bi bi-graph-up"></i>
+        <div class="col-lg-6">
+            <div class="dashboard-card">
+                <div class="card-title">
+                    <i class="bi bi-pie-chart"></i> Events by category
                 </div>
-                <div class="stat-value">@(Model.TotalRegistrations > 0 ? (Model.TotalRegistrations / Model.TotalEvents).ToString("F1") : "0")</div>
-                <div class="stat-label">Avg Registrations/Event</div>
-                <div class="stat-change positive">
-                    <i class="bi bi-ticket"></i> Per event
+                <div class="chart-container">
+                    <canvas id="categoryChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row g-4">
-        <!-- Recent Events -->
+    <!-- Recent Events & Registrations -->
+    <div class="row g-3 mb-4">
         <div class="col-lg-6">
             <div class="dashboard-card">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-clock-history"></i> Recent Events
-                    </h5>
-                    <a asp-action="ManageEvents" class="view-all-link">View All →</a>
+                    <div class="card-title mb-0"><i class="bi bi-clock-history"></i> Recent events</div>
+                    <a asp-controller="Event" asp-action="Index" class="view-all-link">View all →</a>
                 </div>
-
                 @foreach (var eventItem in Model.RecentEvents)
                 {
                     <div class="event-item">
                         <div class="d-flex justify-content-between align-items-start">
                             <div class="flex-grow-1">
-                                <div class="d-flex align-items-center gap-2 mb-1">
-                                    <strong class="text-white">@eventItem.Name</strong>
+                                <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                                    <span style="font-weight: 500; font-size: 0.85rem; color: var(--text-hi);">@eventItem.Name</span>
                                     <span class="status-badge @(eventItem.IsActive ? "status-active" : "status-inactive")">
                                         @(eventItem.IsActive ? "Active" : "Inactive")
                                     </span>
                                 </div>
-                                <div class="small text-muted">
-                                    <i class="bi bi-calendar"></i> @eventItem.DateTime.ToString("MMM dd, yyyy")
-                                    <span class="mx-2">•</span>
-                                    <i class="bi bi-people"></i> @eventItem.RegistrationsCount/@eventItem.Capacity registered
+                                <div class="text-muted">
+                                    <i class="bi bi-calendar3"></i> @eventItem.DateTime.ToString("MMM dd, yyyy")
+                                </div>
+                                <div class="text-muted mt-1">
+                                    <i class="bi bi-people"></i> @eventItem.RegistrationsCount / @eventItem.Capacity
                                 </div>
                             </div>
-                            <a asp-controller="Event" asp-action="Details" asp-route-id="@eventItem.Id"
-                               class="text-info ms-2" style="text-decoration: none;">
+                            <a asp-controller="Event" asp-action="Details" asp-route-id="@eventItem.Id" class="text-muted">
                                 <i class="bi bi-eye"></i>
                             </a>
                         </div>
                     </div>
                 }
+                @if (!Model.RecentEvents.Any())
+                {
+                    <div class="empty-message">
+                        <i class="bi bi-calendar-x"></i>
+                        <p class="mt-2 mb-0">No recent events</p>
+                    </div>
+                }
             </div>
         </div>
 
-        <!-- Recent Registrations -->
         <div class="col-lg-6">
             <div class="dashboard-card">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-activity"></i> Recent Registrations
-                    </h5>
-                </div>
-
+                <div class="card-title mb-3"><i class="bi bi-activity"></i> Recent registrations</div>
                 @foreach (var reg in Model.RecentRegistrations)
                 {
                     <div class="registration-item">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <div class="text-white">
+                                <div style="font-weight: 500; font-size: 0.85rem; color: var(--text-hi);">
                                     <i class="bi bi-person-circle"></i> @reg.UserName
                                 </div>
-                                <div class="small text-muted">
+                                <div class="text-muted">
                                     <i class="bi bi-calendar-event"></i> @reg.EventName
                                 </div>
                             </div>
                             <div class="text-end">
-                                <div class="small text-muted">
-                                    @reg.RegisteredAt.ToString("MMM dd, h:mm tt")
-                                </div>
+                                <div class="text-muted">@reg.RegisteredAt.ToString("MMM dd")</div>
                                 <span class="status-badge status-upcoming">Registered</span>
                             </div>
                         </div>
                     </div>
                 }
-
                 @if (!Model.RecentRegistrations.Any())
                 {
-                    <p class="text-muted text-center py-3">No recent registrations</p>
-                }
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4 mt-2">
-        <!-- Popular Categories -->
-        <div class="col-md-6">
-            <div class="dashboard-card">
-                <h5 class="card-title">
-                    <i class="bi bi-tags"></i> Popular Categories
-                </h5>
-
-                @foreach (var category in Model.PopularCategories)
-                {
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="text-white">@category.Category</span>
-                            <span class="text-muted small">@category.Count events (@category.Percentage%)</span>
-                        </div>
-                        <div class="category-bar">
-                            <div class="category-fill" style="width: @category.Percentage%"></div>
-                        </div>
+                    <div class="empty-message">
+                        <i class="bi bi-ticket"></i>
+                        <p class="mt-2 mb-0">No recent registrations</p>
                     </div>
                 }
             </div>
         </div>
+    </div>
 
-        <!-- Quick Actions -->
-        <div class="col-md-6">
+    <!-- Categories -->
+    <div class="row g-3">
+        <div class="col-12">
             <div class="dashboard-card">
-                <h5 class="card-title">
-                    <i class="bi bi-lightning"></i> Quick Actions
-                </h5>
-
-                <div class="d-grid gap-3">
-                    <a asp-controller="Event" asp-action="Create" class="btn-action text-center">
-                        <i class="bi bi-plus-circle"></i> Create New Event
-                    </a>
-                    <a asp-action="ManageEvents" class="btn-action text-center" style="background: #6c757d;">
-                        <i class="bi bi-gear"></i> Manage All Events
-                    </a>
-                    <a asp-action="ManageUsers" class="btn-action text-center" style="background: #6c757d;">
-                        <i class="bi bi-people"></i> Manage Users
-                    </a>
+                <div class="card-title"><i class="bi bi-tags"></i> Popular categories</div>
+                <div class="row">
+                    @foreach (var category in Model.PopularCategories)
+                    {
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span style="font-size: 0.8rem; color: var(--text-hi);">@category.Category</span>
+                                <span class="text-muted">@category.Count</span>
+                            </div>
+                            <div class="category-bar">
+                                <div class="category-fill" style="width: @category.Percentage%"></div>
+                            </div>
+                        </div>
+                    }
                 </div>
+                @if (!Model.PopularCategories.Any())
+                {
+                    <div class="empty-message">
+                        <i class="bi bi-tag"></i>
+                        <p class="mt-2 mb-0">No categories yet</p>
+                    </div>
+                }
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        // Registrations Chart
+        const registrationsCtx = document.getElementById('registrationsChart').getContext('2d');
+        new Chart(registrationsCtx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.RegistrationsByMonth.Labels)),
+                datasets: [{
+                    label: 'Registrations',
+                    data: @Html.Raw(Json.Serialize(Model.RegistrationsByMonth.Data)),
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#3b82f6',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { backgroundColor: '#1e293b' }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#e2e8f0' }, ticks: { stepSize: 1, color: '#64748b' } },
+                    x: { grid: { display: false }, ticks: { color: '#64748b' } }
+                }
+            }
+        });
+
+        // Categories Chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.EventsByCategory.Labels)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(Model.EventsByCategory.Data)),
+                    backgroundColor: ['#3b82f6', '#ef4444', '#f59e0b', '#10b981', '#8b5cf6'],
+                    borderWidth: 0,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#64748b', font: { size: 10 }, usePointStyle: true, pointStyle: 'circle' }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+    </script>
+}

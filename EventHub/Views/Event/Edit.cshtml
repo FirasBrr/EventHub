@@ -1,5 +1,4 @@
-﻿@using System.Security.Claims
-@model EventHub.Models.Event
+﻿@model EventHub.Models.Event
 
 @{
     ViewData["Title"] = "Edit Event - EventHub";
@@ -7,111 +6,133 @@
 }
 
 <style>
-    .edit-container {
-        max-width: 1000px;
+    .form-container {
+        max-width: 900px;
         margin: 0 auto;
-        padding: 2rem;
+        padding: 32px 20px;
     }
 
     .form-card {
-        background: rgba(26, 26, 46, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        border: 1px solid rgba(0, 210, 255, 0.2);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
         overflow: hidden;
     }
 
     .form-header {
-        background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-        padding: 1.5rem;
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        padding: 28px 24px;
         text-align: center;
     }
 
+        .form-header h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 6px;
+        }
+
     .form-body {
-        padding: 2rem;
+        padding: 28px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
     }
 
     .form-label {
-        color: #00d2ff;
-        font-weight: 500;
-        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-md);
+        margin-bottom: 8px;
+        display: block;
     }
 
+        .form-label i {
+            color: #f59e0b;
+            margin-right: 6px;
+        }
+
     .form-control, .form-select {
-        background: rgba(26, 26, 46, 0.9);
-        border: 1px solid rgba(0, 210, 255, 0.2);
-        color: white;
-        padding: 0.75rem 1rem;
+        width: 100%;
+        padding: 10px 14px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        color: var(--text-hi);
+        font-size: 0.875rem;
     }
 
         .form-control:focus, .form-select:focus {
-            background: rgba(26, 26, 46, 1);
-            border-color: #ffc107;
-            box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
-            color: white;
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
         }
 
-    .input-group-text {
-        background: rgba(26, 26, 46, 0.9);
-        border: 1px solid rgba(0, 210, 255, 0.2);
-        color: #ffc107;
+    #map {
+        height: 320px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        margin-top: 8px;
     }
 
-    #map {
-        height: 400px;
-        border-radius: 15px;
-        border: 1px solid rgba(0, 210, 255, 0.3);
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 16px 0;
+    }
+
+    .info-tip {
+        background: rgba(245, 158, 11, 0.08);
+        border-left: 3px solid #f59e0b;
+        padding: 12px 16px;
+        border-radius: var(--radius-sm);
+        margin: 20px 0;
+        font-size: 0.8rem;
     }
 
     .btn-submit {
-        background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-        color: #1a1a2e;
-        padding: 12px 30px;
-        border-radius: 10px;
-        font-weight: 600;
-        transition: all 0.3s ease;
+        background: #f59e0b;
+        color: white;
         border: none;
+        padding: 12px 28px;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
     }
 
         .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(255, 193, 7, 0.4);
+            background: #d97706;
         }
 
     .btn-cancel {
         background: transparent;
-        border: 2px solid rgba(0, 210, 255, 0.5);
-        color: #00d2ff;
-        padding: 10px 30px;
-        border-radius: 10px;
-        transition: all 0.3s ease;
+        border: 1px solid var(--border);
+        color: var(--text-md);
+        padding: 11px 28px;
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
     }
 
         .btn-cancel:hover {
-            background: rgba(0, 210, 255, 0.1);
+            border-color: var(--accent-red);
+            color: var(--accent-red);
         }
-
-    .info-card {
-        background: rgba(0, 210, 255, 0.1);
-        border-left: 4px solid #ffc107;
-        padding: 1rem;
-        border-radius: 10px;
-        margin-top: 1rem;
-    }
-
-    .text-danger {
-        color: #ff6666 !important;
-        font-size: 0.8rem;
-    }
 </style>
 
-<div class="container edit-container">
+<div class="form-container">
     <div class="form-card">
         <div class="form-header">
-            <h2 class="text-white mb-0">
-                <i class="bi bi-pencil-square"></i> Edit Event
-            </h2>
-            <p class="text-white opacity-75 mt-2">Update your event information</p>
+            <h2><i class="bi bi-pencil-square"></i> Edit event</h2>
+            <p style="color: rgba(255,255,255,0.8);">Update your event information</p>
         </div>
 
         <div class="form-body">
@@ -119,132 +140,86 @@
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="CreatedAt" />
 
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="background: rgba(255,0,0,0.1); border: none; color: #ff6666;"></div>
+                <div asp-validation-summary="ModelOnly" class="validation-summary" style="background: rgba(239,68,68,0.08); padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #dc2626;"></div>
 
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label asp-for="Name" class="form-label">
-                            <i class="bi bi-tag"></i> Event Name
-                        </label>
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="form-label"><i class="bi bi-tag"></i> Event name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Description" class="form-label">
-                        <i class="bi bi-file-text"></i> Description
-                    </label>
+                <div class="form-group">
+                    <label asp-for="Description" class="form-label"><i class="bi bi-file-text"></i> Description</label>
                     <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="DateTime" class="form-label">
-                            <i class="bi bi-calendar"></i> Date & Time
-                        </label>
+                <div class="row" style="display: flex; gap: 16px; flex-wrap: wrap;">
+                    <div style="flex: 1;">
+                        <label asp-for="DateTime" class="form-label"><i class="bi bi-calendar"></i> Date & time</label>
                         <input asp-for="DateTime" class="form-control" type="datetime-local" />
-                        <span asp-validation-for="DateTime" class="text-danger"></span>
                     </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Category" class="form-label">
-                            <i class="bi bi-grid"></i> Category
-                        </label>
+                    <div style="flex: 1;">
+                        <label asp-for="Category" class="form-label"><i class="bi bi-grid"></i> Category</label>
                         <select asp-for="Category" class="form-select">
-                            <option value="Conference">Conference</option>
-                            <option value="Workshop">Workshop</option>
-                            <option value="Music">Music</option>
-                            <option value="Networking">Networking</option>
-                            <option value="Sports">Sports</option>
+                            <option>Conference</option>
+                            <option>Workshop</option>
+                            <option>Music</option>
+                            <option>Networking</option>
+                            <option>Sports</option>
                         </select>
-                        <span asp-validation-for="Category" class="text-danger"></span>
                     </div>
                 </div>
 
-                <!-- Location with Map -->
-                <div class="mb-3">
-                    <label asp-for="FullAddress" class="form-label">
-                        <i class="bi bi-geo-alt"></i> Location Address
-                    </label>
-                    <input asp-for="FullAddress" id="addressInput" class="form-control"
-                           placeholder="Enter full address" />
+                <div class="form-group">
+                    <label class="form-label"><i class="bi bi-geo-alt"></i> Location address</label>
+                    <input asp-for="FullAddress" id="addressInput" class="form-control" />
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Latitude" class="form-label">
-                            <i class="bi bi-arrow-up"></i> Latitude
-                        </label>
+                <div class="row" style="display: flex; gap: 16px; flex-wrap: wrap;">
+                    <div style="flex: 1;">
+                        <label asp-for="Latitude" class="form-label"><i class="bi bi-arrow-up"></i> Latitude</label>
                         <input asp-for="Latitude" id="latitude" class="form-control" />
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Longitude" class="form-label">
-                            <i class="bi bi-arrow-right"></i> Longitude
-                        </label>
+                    <div style="flex: 1;">
+                        <label asp-for="Longitude" class="form-label"><i class="bi bi-arrow-right"></i> Longitude</label>
                         <input asp-for="Longitude" id="longitude" class="form-control" />
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">
-                        <i class="bi bi-map"></i> Click on map to update location
-                    </label>
+                <div class="form-group">
+                    <label class="form-label"><i class="bi bi-map"></i> Click on map to update location</label>
                     <div id="map"></div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Location" class="form-label">
-                            <i class="bi bi-building"></i> Venue Name
-                        </label>
+                <div class="row" style="display: flex; gap: 16px; flex-wrap: wrap;">
+                    <div style="flex: 1;">
+                        <label asp-for="Location" class="form-label"><i class="bi bi-building"></i> Venue name</label>
                         <input asp-for="Location" class="form-control" />
-                        <span asp-validation-for="Location" class="text-danger"></span>
                     </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Capacity" class="form-label">
-                            <i class="bi bi-people"></i> Capacity
-                        </label>
+                    <div style="flex: 1;">
+                        <label asp-for="Capacity" class="form-label"><i class="bi bi-people"></i> Capacity</label>
                         <input asp-for="Capacity" class="form-control" />
-                        <span asp-validation-for="Capacity" class="text-danger"></span>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <div class="form-check">
-                            <input asp-for="IsFree" class="form-check-input" id="isFreeCheckbox" />
-                            <label asp-for="IsFree" class="form-check-label text-white">
-                                <i class="bi bi-gift"></i> This is a free event
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 mb-3" id="priceField">
-                        <label asp-for="Price" class="form-label">
-                            <i class="bi bi-currency-dollar"></i> Ticket Price
-                        </label>
-                        <input asp-for="Price" class="form-control" />
-                        <span asp-validation-for="Price" class="text-danger"></span>
-                    </div>
+                <div class="checkbox-group">
+                    <input asp-for="IsFree" id="isFreeCheckbox" type="checkbox" />
+                    <label asp-for="IsFree">This is a free event</label>
                 </div>
 
-                <div class="info-card">
-                    <small>
-                        <i class="bi bi-info-circle"></i>
-                        <strong class="text-white">Tip:</strong> Click on the map to update the event location, or enter an address.
-                    </small>
+                <div class="form-group" id="priceField">
+                    <label asp-for="Price" class="form-label"><i class="bi bi-currency-dollar"></i> Ticket price</label>
+                    <input asp-for="Price" class="form-control" />
                 </div>
 
-                <div class="mt-4 d-flex gap-3">
-                    <button type="submit" class="btn-submit">
-                        <i class="bi bi-save"></i> Save Changes
-                    </button>
-                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn-cancel">
-                        <i class="bi bi-x-lg"></i> Cancel
-                    </a>
+                <div class="info-tip">
+                    <i class="bi bi-info-circle"></i> <strong>Tip:</strong> Click on the map to update the event location.
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button type="submit" class="btn-submit"><i class="bi bi-save"></i> Save changes</button>
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn-cancel"><i class="bi bi-x-lg"></i> Cancel</a>
                 </div>
             </form>
         </div>
@@ -256,16 +231,13 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        var map;
-        var marker;
+        var map, marker;
+        var lat = @(Model.Latitude ?? 40.7128);
+        var lng = @(Model.Longitude ?? -74.0060);
 
         function initMap() {
-            var lat = @(Model.Latitude ?? 40.7128);
-            var lng = @(Model.Longitude ?? -74.0060);
-
             map = L.map('map').setView([lat, lng], 13);
-
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; OpenStreetMap'
             }).addTo(map);
 
@@ -274,60 +246,41 @@
             }
 
             map.on('click', function(e) {
-                var newLat = e.latlng.lat;
-                var newLng = e.latlng.lng;
-
-                document.getElementById('latitude').value = newLat.toFixed(6);
-                document.getElementById('longitude').value = newLng.toFixed(6);
-
-                if (marker) {
-                    marker.setLatLng(e.latlng);
-                } else {
-                    marker = L.marker(e.latlng).addTo(map);
-                }
-
-                reverseGeocode(newLat, newLng);
+                document.getElementById('latitude').value = e.latlng.lat.toFixed(6);
+                document.getElementById('longitude').value = e.latlng.lng.toFixed(6);
+                if (marker) marker.setLatLng(e.latlng);
+                else marker = L.marker(e.latlng).addTo(map);
+                reverseGeocode(e.latlng.lat, e.latlng.lng);
             });
         }
 
         function reverseGeocode(lat, lng) {
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.display_name) {
-                        document.getElementById('addressInput').value = data.display_name;
-                    }
-                })
-                .catch(error => console.log('Geocoding error:', error));
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                .then(res => res.json())
+                .then(data => { if (data.display_name) document.getElementById('addressInput').value = data.display_name; });
         }
 
         document.getElementById('addressInput').addEventListener('blur', function() {
-            var address = this.value;
+            let address = this.value;
             if (address) {
                 fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
-                    .then(response => response.json())
+                    .then(res => res.json())
                     .then(data => {
-                        if (data && data.length > 0) {
-                            var lat = data[0].lat;
-                            var lng = data[0].lon;
-
+                        if (data && data.length) {
+                            let lat = data[0].lat, lng = data[0].lon;
                             document.getElementById('latitude').value = lat;
                             document.getElementById('longitude').value = lng;
-
                             map.setView([lat, lng], 15);
-                            if (marker) {
-                                marker.setLatLng([lat, lng]);
-                            } else {
-                                marker = L.marker([lat, lng]).addTo(map);
-                            }
+                            if (marker) marker.setLatLng([lat, lng]);
+                            else marker = L.marker([lat, lng]).addTo(map);
                         }
                     });
             }
         });
 
         document.getElementById('isFreeCheckbox').addEventListener('change', function() {
-            var priceField = document.getElementById('priceField');
-            var priceInput = document.querySelector('#Price');
+            let priceField = document.getElementById('priceField');
+            let priceInput = document.querySelector('#Price');
             if (this.checked) {
                 priceField.style.display = 'none';
                 priceInput.value = 0;
