@@ -187,10 +187,18 @@ namespace EventHub.Controllers
             return RedirectToAction(nameof(Details), new { id });
         }
 
-        // GET: Event/MyEvents - Users can see events they registered for
+      
+        // GET: Event/MyEvents - Regular users can see events they registered for
         [Authorize]
         public async Task<IActionResult> MyEvents()
         {
+            // Redirect Admin users - they don't need a My Events page
+            if (User.IsInRole("Admin"))
+            {
+                TempData["Info"] = "Admins don't have a My Events page. Use Create Event to manage your events.";
+                return RedirectToAction(nameof(Index));
+            }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var myEvents = await _context.EventRegistrations
@@ -201,7 +209,37 @@ namespace EventHub.Controllers
                 .ToListAsync();
 
             return View(myEvents);
+        }        // POST: Event/CancelRegistration/5
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelRegistration(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var registration = await _context.EventRegistrations
+                .FirstOrDefaultAsync(r => r.EventId == id && r.UserId == userId);
+
+            if (registration == null)
+            {
+                TempData["Error"] = "Registration not found.";
+                return RedirectToAction(nameof(MyEvents));
+            }
+
+            var eventItem = await _context.Events.FindAsync(id);
+            if (eventItem != null && eventItem.DateTime <= DateTime.Now)
+            {
+                TempData["Error"] = "Cannot cancel registration for past events.";
+                return RedirectToAction(nameof(MyEvents));
+            }
+
+            _context.EventRegistrations.Remove(registration);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Registration cancelled successfully.";
+            return RedirectToAction(nameof(MyEvents));
         }
+
 
         private bool EventExists(int id)
         {

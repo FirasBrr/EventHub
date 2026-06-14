@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260614090712_AddEventAndRegistrationTables")]
-    partial class AddEventAndRegistrationTables
+    [Migration("20260614095550_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

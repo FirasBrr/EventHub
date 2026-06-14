@@ -287,7 +287,7 @@
                                     <a asp-action="Details" asp-route-id="@item.Id" class="btn-view" style="padding: 6px 15px; font-size: 0.8rem; margin-right: 5px;">
                                         <i class="bi bi-eye"></i> View
                                     </a>
-                                    @if (User.Identity.IsAuthenticated)
+                                    @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
                                     {
                                         <a asp-action="Register" asp-route-id="@item.Id" class="btn-register-event" style="padding: 6px 15px; font-size: 0.8rem;">
                                             <i class="bi bi-ticket"></i> Register

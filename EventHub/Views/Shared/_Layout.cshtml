@@ -240,11 +240,16 @@
                     </li>
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Event" asp-action="MyEvents">
-                                <i class="bi bi-star-fill"></i> My Events
-                            </a>
-                        </li>
+                        @* Only show My Events for regular users, not Admin *@
+                        @if (!User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Event" asp-action="MyEvents">
+                                    <i class="bi bi-star-fill"></i> My Events
+                                </a>
+                            </li>
+                        }
+
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">

@@ -1,0 +1,461 @@
+﻿@using System.Security.Claims
+@model EventHub.Models.Event
+
+@{
+    ViewData["Title"] = $"{Model.Name} - EventHub";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .event-details-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .event-header {
+        background: rgba(26, 26, 46, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .event-header-image {
+        height: 300px;
+        background: linear-gradient(135deg, #00d2ff33, #3a7bd533);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .event-status {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-weight: bold;
+        z-index: 1;
+    }
+
+    .event-title-section {
+        padding: 2rem;
+    }
+
+    .event-category-badge {
+        display: inline-block;
+        padding: 5px 15px;
+        background: rgba(0, 210, 255, 0.2);
+        border-radius: 20px;
+        color: #00d2ff;
+        font-size: 0.85rem;
+    }
+
+    .info-card {
+        background: rgba(26, 26, 46, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .info-icon {
+        width: 50px;
+        height: 50px;
+        background: rgba(0, 210, 255, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #00d2ff;
+        font-size: 1.5rem;
+    }
+
+    .info-title {
+        color: #a0a0b0;
+        font-size: 0.85rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    #fullMap {
+        height: 400px;
+        border-radius: 15px;
+        border: 1px solid rgba(0, 210, 255, 0.3);
+    }
+
+    .registration-card {
+        background: linear-gradient(135deg, rgba(0, 210, 255, 0.1), rgba(58, 123, 213, 0.1));
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        border: 1px solid rgba(0, 210, 255, 0.3);
+    }
+
+    .price-display {
+        font-size: 2.5rem;
+        font-weight: bold;
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .btn-register {
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        color: white;
+        padding: 12px 40px;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        width: 100%;
+    }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 210, 255, 0.4);
+        }
+
+    .btn-registered {
+        background: #28a745;
+        width: 100%;
+        padding: 12px 40px;
+        border-radius: 50px;
+        color: white;
+        font-weight: 600;
+        border: none;
+    }
+
+    .btn-cancel-registration {
+        background: #dc3545;
+        color: white;
+        padding: 12px 40px;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+        .btn-cancel-registration:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+    .btn-edit {
+        background: #ffc107;
+        color: #1a1a2e;
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .capacity-bar {
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+        height: 8px;
+        overflow: hidden;
+        margin: 10px 0;
+    }
+
+    .capacity-fill {
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.3s ease;
+    }
+
+    .attendee-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .attendee-item {
+        padding: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .attendee-item i {
+            color: #00d2ff;
+            font-size: 1.2rem;
+        }
+
+    @@media (max-width: 768px) {
+        .event-details-container {
+            padding: 1rem;
+        }
+
+        .event-header-image {
+            height: 200px;
+        }
+
+        .price-display {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+
+<div class="event-details-container">
+    <!-- Event Header -->
+    <div class="event-header">
+        <div class="event-header-image">
+            <div class="event-status" style="background: @(Model.IsFree ? "#28a745" : "#00d2ff")">
+                @(Model.IsFree ? "FREE EVENT" : "PAID EVENT")
+            </div>
+            <i class="bi bi-calendar-event" style="font-size: 5rem; color: rgba(255,255,255,0.3);"></i>
+        </div>
+
+        <div class="event-title-section">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                <div>
+                    <span class="event-category-badge mb-2 d-inline-block">
+                        <i class="bi bi-tag"></i> @Model.Category
+                    </span>
+                    <h1 class="text-white mb-2">@Model.Name</h1>
+                    <p class="text-muted">Created on @Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
+                </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">
+                            <i class="bi bi-pencil"></i> Edit Event
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn-delete">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column - Event Info -->
+        <div class="col-lg-8">
+            <!-- Description -->
+            <div class="info-card">
+                <h4 class="text-white mb-3">
+                    <i class="bi bi-file-text"></i> About This Event
+                </h4>
+                <p class="text-muted" style="line-height: 1.6;">@Model.Description</p>
+            </div>
+
+            <!-- Location & Map -->
+            <div class="info-card">
+                <h4 class="text-white mb-3">
+                    <i class="bi bi-geo-alt"></i> Location
+                </h4>
+                <p class="text-muted mb-3">
+                    <i class="bi bi-building"></i> <strong>Venue:</strong> @Model.Location
+                </p>
+                @if (!string.IsNullOrEmpty(Model.FullAddress))
+                {
+                    <p class="text-muted mb-3">
+                        <i class="bi bi-pin-map"></i> <strong>Full Address:</strong> @Model.FullAddress
+                    </p>
+                }
+                <div id="fullMap"></div>
+            </div>
+
+            <!-- Attendees Section -->
+            @if (Model.Registrations != null && Model.Registrations.Any())
+            {
+                <div class="info-card">
+                    <h4 class="text-white mb-3">
+                        <i class="bi bi-people"></i> Attendees (@Model.Registrations.Count)
+                    </h4>
+                    <div class="attendee-list">
+                        @foreach (var reg in Model.Registrations.Take(10))
+                        {
+                            <div class="attendee-item">
+                                <i class="bi bi-person-circle"></i>
+                                <span class="text-white">Attendee</span>
+                                <small class="text-muted ms-auto">Registered on @reg.RegisteredAt.ToString("MMM dd, yyyy")</small>
+                            </div>
+                        }
+                        @if (Model.Registrations.Count > 10)
+                        {
+                            <div class="text-center mt-2">
+                                <small class="text-muted">And @(Model.Registrations.Count - 10) more attendees...</small>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Right Column - Registration Card -->
+        <div class="col-lg-4">
+            <div class="registration-card">
+                <div class="mb-3">
+                    <span class="price-display">
+                        @(Model.IsFree ? "FREE" : Model.Price.ToString("C"))
+                    </span>
+                </div>
+
+                <!-- Date & Time -->
+                <div class="text-start mb-3">
+                    <div class="info-title">
+                        <i class="bi bi-calendar"></i> Date & Time
+                    </div>
+                    <div class="info-value">
+                        @Model.DateTime.ToString("dddd, MMMM dd, yyyy")
+                        <br />
+                        <small class="text-muted">@Model.DateTime.ToString("h:mm tt")</small>
+                    </div>
+                </div>
+
+                <!-- Capacity -->
+                <div class="text-start mb-3">
+                    <div class="info-title">
+                        <i class="bi bi-people"></i> Capacity
+                    </div>
+                    <div class="info-value">
+                        @(Model.Registrations?.Count ?? 0) / @Model.Capacity spots filled
+                    </div>
+                    <div class="capacity-bar">
+                        <div class="capacity-fill" style="width: @((Model.Registrations != null && Model.Capacity > 0 ? (double)Model.Registrations.Count / Model.Capacity * 100 : 0))%"></div>
+                    </div>
+                </div>
+
+                <!-- Registration & Cancel Buttons -->
+                @if (User.IsInRole("Admin"))
+                {
+                    <!-- Admin message - cannot register -->
+                    <div class="alert alert-info text-center" style="background: rgba(0, 210, 255, 0.1); border: 1px solid #00d2ff;">
+                        <i class="bi bi-shield-lock-fill"></i>
+                        <p class="mb-0 mt-2">As an administrator, you manage events rather than register as an attendee.</p>
+                        <small class="text-muted">Use the Create Event button to add new events.</small>
+                    </div>
+                }
+                else if (User.Identity?.IsAuthenticated == true)
+                {
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var isRegistered = Model.Registrations != null && Model.Registrations.Any(r => r.UserId == userId);
+
+                    if (isRegistered)
+                    {
+                        <button class="btn-registered" disabled>
+                            <i class="bi bi-check-circle"></i> You're Registered!
+                        </button>
+
+                        <!-- Cancel Registration Button -->
+                        <form asp-action="CancelRegistration" asp-route-id="@Model.Id" method="post"
+                              onsubmit="return confirm('Are you sure you want to cancel your registration for @Model.Name?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-cancel-registration">
+                                <i class="bi bi-x-circle"></i> Cancel Registration
+                            </button>
+                        </form>
+
+                        <small class="text-muted d-block mt-2">
+                            <i class="bi bi-info-circle"></i> Check your "My Events" page for details
+                        </small>
+                    }
+                    else if ((Model.Registrations?.Count ?? 0) >= Model.Capacity)
+                    {
+                        <button class="btn-register" disabled style="background: #6c757d; cursor: not-allowed;">
+                            <i class="bi bi-x-circle"></i> Event is Full
+                        </button>
+                    }
+                    else
+                    {
+                        <form asp-action="Register" asp-route-id="@Model.Id" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-register">
+                                <i class="bi bi-ticket-perforated"></i> Register Now
+                            </button>
+                        </form>
+                    }
+                }
+                else
+                {
+                    <div>
+                        <a href="/Account/Login" class="btn-register" style="display: block; text-align: center; text-decoration: none;">
+                            <i class="bi bi-box-arrow-in-right"></i> Login to Register
+                        </a>
+                        <small class="text-muted d-block mt-2">
+                            Don't have an account? <a href="/Account/Register" style="color: #00d2ff;">Sign up here</a>
+                        </small>
+                    </div>
+                }
+                <hr style="border-color: rgba(0,210,255,0.2); margin: 1.5rem 0;">
+
+                <!-- Share Buttons -->
+                <div class="text-center">
+                    <small class="text-muted">Share this event</small>
+                    <div class="mt-2">
+                        <a href="#" class="text-white me-2" style="text-decoration: none;">
+                            <i class="bi bi-facebook" style="color: #1877f2;"></i>
+                        </a>
+                        <a href="#" class="text-white me-2" style="text-decoration: none;">
+                            <i class="bi bi-twitter" style="color: #1da1f2;"></i>
+                        </a>
+                        <a href="#" class="text-white" style="text-decoration: none;">
+                            <i class="bi bi-whatsapp" style="color: #25d366;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize full map
+        var map = L.map('fullMap');
+
+        @if (Model.Latitude.HasValue && Model.Longitude.HasValue)
+        {
+                    <text>
+                    map.setView([@Model.Latitude, @Model.Longitude], 15);
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    }).addTo(map);
+                    L.marker([@Model.Latitude, @Model.Longitude]).addTo(map)
+                        .bindPopup('<b>@Model.Name</b><br/>@Model.Location')
+                        .openPopup();
+                    </text>
+        }
+        else
+        {
+                    <text>
+                    map.setView([40.7128, -74.0060], 13);
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                        attribution: '&copy; OpenStreetMap'
+                    }).addTo(map);
+                    L.marker([40.7128, -74.0060]).addTo(map)
+                        .bindPopup('Location not specified');
+                    </text>
+        }
+    </script>
+}

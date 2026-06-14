@@ -1,37 +1,208 @@
 ﻿@model IEnumerable<EventHub.Models.Event>
 
 @{
-    ViewData["Title"] = "My Events";
+    ViewData["Title"] = "My Events - EventHub";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
-    <h1><i class="bi bi-star"></i> My Registered Events</h1>
+<style>
+    .myevents-header {
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 30px 30px;
+    }
 
+    .event-card {
+        background: rgba(26, 26, 46, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        transition: all 0.3s ease;
+        margin-bottom: 1rem;
+    }
+
+        .event-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0, 210, 255, 0.5);
+        }
+
+    .event-status {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .status-upcoming {
+        background: #28a745;
+        color: white;
+    }
+
+    .status-past {
+        background: #6c757d;
+        color: white;
+    }
+
+    .status-today {
+        background: #ffc107;
+        color: #1a1a2e;
+    }
+
+    .btn-cancel {
+        background: #dc3545;
+        color: white;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+        .btn-cancel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(220, 53, 69, 0.4);
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem;
+        background: rgba(26, 26, 46, 0.95);
+        border-radius: 20px;
+        border: 1px solid rgba(0, 210, 255, 0.2);
+    }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #00d2ff;
+            margin-bottom: 1rem;
+        }
+
+    .count-badge {
+        background: rgba(0, 210, 255, 0.2);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+</style>
+
+<div class="myevents-header">
+    <div class="container">
+        <h1 class="text-white text-center mb-3">
+            <i class="bi bi-star-fill"></i> My Events
+        </h1>
+        <p class="text-white text-center opacity-75">Events you've registered for</p>
+    </div>
+</div>
+
+<div class="container mb-5">
     @if (!Model.Any())
     {
-        <div class="alert alert-info mt-4">
-            You haven't registered for any events yet.
-            <a href="/Event">Browse events</a> to find something interesting!
+        <div class="empty-state">
+            <i class="bi bi-calendar-x"></i>
+            <h3 class="text-white">No Events Yet</h3>
+            <p class="text-muted">You haven't registered for any events yet.</p>
+            <a href="/Event" class="btn-view mt-3" style="display: inline-block; padding: 10px 25px;">
+                <i class="bi bi-search"></i> Browse Events
+            </a>
         </div>
     }
     else
     {
-        <div class="row mt-4">
-            @foreach (var item in Model)
-            {
-                <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">@item.Name</h5>
-                            <p class="card-text">
-                                <i class="bi bi-calendar"></i> @item.DateTime.ToString("MMM dd, yyyy - h:mm tt")<br />
-                                <i class="bi bi-geo-alt"></i> @item.Location
-                            </p>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">View Event</a>
+        <div class="row">
+            <div class="col-12 mb-3">
+                <div class="count-badge d-inline-block">
+                    <i class="bi bi-calendar-check"></i> Total: @Model.Count() events
+                </div>
+            </div>
+        </div>
+
+        @foreach (var item in Model)
+        {
+            var isUpcoming = item.DateTime > DateTime.Now;
+            var isToday = item.DateTime.Date == DateTime.Now.Date;
+            var statusClass = isToday ? "status-today" : (isUpcoming ? "status-upcoming" : "status-past");
+            var statusText = isToday ? "Today" : (isUpcoming ? "Upcoming" : "Past");
+
+            <div class="event-card">
+                <div class="row g-0">
+                    <div class="col-md-8">
+                        <div class="p-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <span class="event-status @statusClass mb-2 d-inline-block">
+                                        @statusText
+                                    </span>
+                                    <h5 class="text-white mt-2">@item.Name</h5>
+                                    <p class="text-muted small">@item.Description</p>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar"></i>
+                                        @item.DateTime.ToString("dddd, MMMM dd, yyyy")
+                                    </small>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock"></i>
+                                        @item.DateTime.ToString("h:mm tt")
+                                    </small>
+                                </div>
+                                <div class="col-md-6 mt-1">
+                                    <small class="text-muted">
+                                        <i class="bi bi-geo-alt"></i> @item.Location
+                                    </small>
+                                </div>
+                                <div class="col-md-6 mt-1">
+                                    <small class="text-muted">
+                                        <i class="bi bi-tag"></i> @item.Category
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="p-3 h-100 d-flex flex-column justify-content-center align-items-end">
+                            @if (isUpcoming)
+                            {
+                                <form asp-action="CancelRegistration" asp-route-id="@item.Id" method="post"
+                                      onsubmit="return confirm('Are you sure you want to cancel your registration for @item.Name?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-cancel mb-2">
+                                        <i class="bi bi-x-circle"></i> Cancel Registration
+                                    </button>
+                                </form>
+                            }
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn-view" style="padding: 6px 20px; font-size: 0.85rem;">
+                                <i class="bi bi-eye"></i> View Details
+                            </a>
                         </div>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     }
 </div>
+
+<style>
+    .btn-view {
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        color: white;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        border: none;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+            color: white;
+        }
+</style>
